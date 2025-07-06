@@ -21,7 +21,7 @@ create table if not exists vendedor (
     telefone varchar(20),
     email varchar(30) not null,
     cnpj_concessionaria varchar(14) not null,
-    foreign key (cnpj_concessionaria) references concessionaria(cnpj) on delete cascade
+    foreign key (cnpj_concessionaria) references concessionaria(cnpj) 
 );
 
 create table if not exists carro (
@@ -41,12 +41,14 @@ create table if not exists venda (
     cpf_cliente varchar(11),
     cpf_vendedor varchar(11),
     placa_carro varchar(7),
+    cnpj_concessionaria varchar(14) not null,
     data date,
     valor decimal(20, 2) not null,
     tipo_pagamento varchar(20) not null,
     total_pago decimal(20, 2) not null,
-    primary key (cpf_cliente, cpf_vendedor, placa_carro, data),
+    primary key (cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data),
     foreign key (cpf_cliente) references cliente(cpf),
     foreign key (cpf_vendedor) references vendedor(cpf),
-    foreign key (placa_carro) references carro(placa)
+    foreign key (placa_carro) references carro(placa),
+    foreign key (cnpj_concessionaria) references concessionaria(cnpj)
 );
