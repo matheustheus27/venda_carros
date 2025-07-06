@@ -47,8 +47,8 @@ create table if not exists venda (
     tipo_pagamento varchar(20) not null,
     total_pago decimal(20, 2) not null,
     primary key (cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data),
-    foreign key (cpf_cliente) references cliente(cpf),
-    foreign key (cpf_vendedor) references vendedor(cpf),
-    foreign key (placa_carro) references carro(placa),
-    foreign key (cnpj_concessionaria) references concessionaria(cnpj)
+    foreign key (cpf_cliente) references cliente(cpf) on delete cascade,
+    foreign key (cpf_vendedor) references vendedor(cpf) on delete cascade,
+    foreign key (placa_carro) references carro(placa) on delete cascade,
+    foreign key (cnpj_concessionaria) references concessionaria(cnpj) on delete cascade
 );
