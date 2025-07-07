@@ -1,4 +1,5 @@
 from db import get_connection
+from fastapi.responses import JSONResponse
 
 def index():
     connection = None
@@ -12,17 +13,17 @@ def index():
 
         result = cursor.fetchall()
 
-        return {
+        return JSONResponse({
             "status": True,
             "message": "Carros buscados com sucesso!",
             "data": result
-        }
+        }, 200)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao buscar os carros!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()
@@ -44,16 +45,16 @@ def create(placa, marca, modelo, ano, cor, quilometragem, preco, status, cnpj_co
 
         connection.commit()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Carro criado com sucesso!"
-        }
+        }, 201)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao criar o carro!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()
@@ -75,17 +76,17 @@ def show(placa):
 
         result = cursor.fetchone()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Carro buscado com sucesso!",
             "data": result
-        }
+        }, 200)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao buscar o carro!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()
@@ -107,16 +108,16 @@ def update(placa, marca, modelo, ano, cor, quilometragem, preco, status, cnpj_co
 
         connection.commit()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Carro atualizado com sucesso!"
-        }
+        }, 200)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao atualizar o carro!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()
@@ -138,16 +139,16 @@ def delete(placa):
 
         connection.commit()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Carro deletado com sucesso!"
-        }
+        }, 200)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao deletar o carro!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()

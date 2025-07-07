@@ -1,4 +1,5 @@
 from db import get_connection
+from fastapi.responses import JSONResponse
 
 def index():
     connection = None
@@ -11,17 +12,17 @@ def index():
 
         result = cursor.fetchall()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Vendedores buscados com sucesso!",
             "data": result
-        }
+        }, 200)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao buscar os vendedores!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()
@@ -43,16 +44,16 @@ def create(cpf, nome, email, cnpj_concessionaria, telefone=None):
 
         connection.commit()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Vendedor criado com sucesso!"
-        }
+        }, 201)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao criar o vendedor!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()
@@ -74,17 +75,17 @@ def show(cpf):
 
         result = cursor.fetchone()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Vendedor buscado com sucesso!",
             "data": result
-        }
+        }, 200)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao buscar o vendedor!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()
@@ -106,16 +107,16 @@ def update(cpf, nome, email, cnpj_concessionaria, telefone=None):
 
         connection.commit()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Vendedor atualizado com sucesso!"
-        }
+        }, 200)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao atualizar o vendedor!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()
@@ -137,16 +138,16 @@ def delete(cpf):
 
         connection.commit()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Vendedor deletado com sucesso!"
-        }
+        }, 200)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao deletar o vendedor!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()

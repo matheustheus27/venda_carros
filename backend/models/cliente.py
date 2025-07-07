@@ -1,4 +1,5 @@
 from db import get_connection
+from fastapi.responses import JSONResponse
 
 def index():
     connection = None
@@ -11,17 +12,17 @@ def index():
 
         result = cursor.fetchall()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Clientes buscados com sucesso!",
             "data": result
-        }
+        }, 200)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao buscar os clientes!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()
@@ -43,16 +44,16 @@ def create(cpf, nome, email, endereco, telefone=None):
 
         connection.commit()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Cliente criado com sucesso!"
-        }
+        }, 201)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao criar o cliente!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()
@@ -74,17 +75,17 @@ def show(cpf):
 
         result = cursor.fetchone()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Cliente buscado com sucesso!",
             "data": result
-        }
+        }, 200)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao buscar o cliente!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()
@@ -106,16 +107,16 @@ def update(cpf, nome, email, endereco, telefone=None):
 
         connection.commit()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Cliente atualizado com sucesso!"
-        }
+        }, 200)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao atualizar o cliente!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()
@@ -137,16 +138,16 @@ def delete(cpf):
 
         connection.commit()
 
-        return {
+        return  JSONResponse({
             "status": True,
             "message": "Cliente deletado com sucesso!"
-        }
+        }, 200)
     except Exception as e:
-        return {
+        return  JSONResponse({
             "status": False,
             "message": "Erro ao deletar o cliente!",
             "erro": str(e)
-        }
+        }, 400)
     finally:
         if cursor:
             cursor.close()
