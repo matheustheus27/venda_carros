@@ -13,17 +13,17 @@ def index():
 def create(data: VendaCreate):
     return venda.create(data)
 
-@router.get('/{cpf_vendedor}/{cpf_cliente}/{placa}/{data_venda}')
-def show(cpf_vendedor: str, cpf_cliente: str, placa: str, data_venda: date):
-    return venda.show(cpf_vendedor, cpf_cliente, placa, data_venda)
+@router.get('/{cpf_vendedor}/{cpf_cliente}/{placa_carro}/{cnpj_concessionaria}/{data_venda}')
+def show(cpf_vendedor: str, cpf_cliente: str, placa_carro: str, cnpj_concessionaria: str, data_venda: date):
+    return venda.show(cpf_vendedor, cpf_cliente, placa_carro, cnpj_concessionaria, data_venda)
 
-@router.put('/{cpf_vendedor}/{cpf_cliente}/{placa}/{data_venda}')
-def update(cpf_vendedor: str, cpf_cliente: str, placa: str, data_venda, data: VendaUpdate):
-    return venda.update(cpf_vendedor, cpf_cliente, placa, data_venda, **data.model_dump())
+@router.put('/{cpf_vendedor}/{cpf_cliente}/{placa_carro}/{cnpj_concessionaria}/{data_venda}')
+def update(cpf_vendedor: str, cpf_cliente: str, placa_carro: str, cnpj_concessionaria: str, data_venda, data: VendaUpdate):
+    return venda.update(cpf_vendedor, cpf_cliente, placa_carro, cnpj_concessionaria, data_venda, **data.model_dump())
 
-@router.delete('/{cpf_vendedor}/{cpf_cliente}/{placa}/{data_venda}')
-def delete(cpf_vendedor: str, cpf_cliente: str, placa: str, data_venda: date):
-    return venda.delete(cpf_vendedor, cpf_cliente, placa, data_venda)
+@router.delete('/{cpf_vendedor}/{cpf_cliente}/{placa_carro}/{cnpj_concessionaria}/{data_venda}')
+def delete(cpf_vendedor: str, cpf_cliente: str, placa_carro: str, cnpj_concessionaria: str, data_venda: date):
+    return venda.delete(cpf_vendedor, cpf_cliente, placa_carro, cnpj_concessionaria, data_venda)
 
 @router.get('/vendedor/{cpf_vendedor}')
 def find_by_vendedor(cpf_vendedor: str):
@@ -32,3 +32,7 @@ def find_by_vendedor(cpf_vendedor: str):
 @router.get('/cliente/{cpf_cliente}')
 def find_by_cliente(cpf_cliente: str):
     return venda.find_by_cliente(cpf_cliente)
+
+@router.get('/concessionaria/{cnpj_concessionaria}')
+def find_by_concessionaria(cnpj_concessionaria: str):
+    return venda.find_by_concessionaria(cnpj_concessionaria)

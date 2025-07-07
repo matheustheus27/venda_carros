@@ -28,7 +28,7 @@ def index():
         if connection:
             connection.close()
 
-def create(cpf_cliente, cpf_vendedor, placa_carro, data, valor, tipo_pagamento, total_pago):
+def create(cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data, valor, tipo_pagamento, total_pago):
     connection = None
     cursor = None
     
@@ -37,8 +37,8 @@ def create(cpf_cliente, cpf_vendedor, placa_carro, data, valor, tipo_pagamento, 
 
         cursor = connection.cursor()
         cursor.execute(
-            "INSERT INTO venda (cpf_cliente, cpf_vendedor, placa_carro, data, valor, tipo_pagamento, total_pago) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-            (cpf_cliente, cpf_vendedor, placa_carro, data, valor, tipo_pagamento, total_pago)
+            "INSERT INTO venda (cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data, valor, tipo_pagamento, total_pago) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+            (cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data, valor, tipo_pagamento, total_pago)
         )
 
         connection.commit()
@@ -59,7 +59,7 @@ def create(cpf_cliente, cpf_vendedor, placa_carro, data, valor, tipo_pagamento, 
         if connection:
             connection.close()
 
-def show(cpf_cliente, cpf_vendedor, placa_carro, data):
+def show(cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data):
     connection = None
     cursor = None
     
@@ -68,8 +68,8 @@ def show(cpf_cliente, cpf_vendedor, placa_carro, data):
 
         cursor = connection.cursor(dictionary=True)
         cursor.execute(
-            "SELECT * FROM venda WHERE cpf_cliente=%s AND cpf_vendedor=%s AND placa_carro=%s AND data=%s",
-            (cpf_cliente, cpf_vendedor, placa_carro, data)
+            "SELECT * FROM venda WHERE cpf_cliente=%s AND cpf_vendedor=%s AND placa_carro=%s AND cnpj_concessionaria=%s AND data=%s",
+            (cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data)
         )
 
         result = cursor.fetchone()
@@ -91,7 +91,7 @@ def show(cpf_cliente, cpf_vendedor, placa_carro, data):
         if connection:
             connection.close()
 
-def update(cpf_cliente, cpf_vendedor, placa_carro, data, valor, tipo_pagamento, total_pago):
+def update(cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data, valor, tipo_pagamento, total_pago):
     connection = None
     cursor = None
     
@@ -100,8 +100,8 @@ def update(cpf_cliente, cpf_vendedor, placa_carro, data, valor, tipo_pagamento, 
 
         cursor = connection.cursor()
         cursor.execute(
-            "UPDATE venda set valor=%s, tipo_pagamento=%s, total_pago=%s WHERE cpf_cliente=%s AND cpf_vendedor=%s AND placa_carro=%s AND data=%s",
-            (valor, tipo_pagamento, total_pago, cpf_cliente, cpf_vendedor, placa_carro, data)
+            "UPDATE venda set valor=%s, tipo_pagamento=%s, total_pago=%s WHERE cpf_cliente=%s AND cpf_vendedor=%s AND placa_carro=%s AND cnpj_concessionaria=%s AND data=%s",
+            (valor, tipo_pagamento, total_pago, cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data)
         )
 
         connection.commit()
@@ -122,7 +122,7 @@ def update(cpf_cliente, cpf_vendedor, placa_carro, data, valor, tipo_pagamento, 
         if connection:
             connection.close()
 
-def delete(cpf_cliente, cpf_vendedor, placa_carro, data):
+def delete(cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data):
     connection = None
     cursor = None
     
@@ -131,8 +131,8 @@ def delete(cpf_cliente, cpf_vendedor, placa_carro, data):
 
         cursor = connection.cursor()
         cursor.execute(
-            "DELETE FROM venda WHERE cpf_cliente=%s AND cpf_vendedor=%s AND placa_carro=%s AND data=%s",
-            (cpf_cliente, cpf_vendedor, placa_carro, data)
+            "DELETE FROM venda WHERE cpf_cliente=%s AND cpf_vendedor=%s AND placa_carro=%s AND cnpj_concessionaria=%s AND data=%s",
+            (cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data)
         )
 
         connection.commit()
@@ -203,6 +203,38 @@ def find_by_cliente(cpf_cliente):
         return {
             "status": True,
             "message": "Vendas do cliente {cpf_cliente} buscadas com sucesso!",
+            "data": result
+        }
+    except Exception as e:
+        return {
+            "status": False,
+            "message": "Erro ao buscar as vendas!",
+            "erro": str(e)
+        }
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+def find_by_concessionaria(cnpj_concessionaria):
+    connection = None
+    cursor = None
+    
+    try:
+        connection = get_connection()
+
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT * FROM venda WHERE cnpj_concessionaria=%s",
+            (cnpj_concessionaria,)
+        )
+
+        result = cursor.fetchall()
+
+        return {
+            "status": True,
+            "message": "Vendas da concessionária {cnpj_concessionaria} buscadas com sucesso!",
             "data": result
         }
     except Exception as e:
