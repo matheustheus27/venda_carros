@@ -154,3 +154,35 @@ def delete(placa):
             cursor.close()
         if connection:
             connection.close()
+
+def find_by_concessionaria(cnpj_concessionaria):
+    connection = None
+    cursor = None
+
+    try:
+        connection = get_connection()
+
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT * FROM carro WHERE cnpj_concessionaria=%s",
+            (cnpj_concessionaria,)
+        )
+
+        result = cursor.fetchall()
+
+        return  JSONResponse({
+            "status": True,
+            "message": f"Carros da concessionária {cnpj_concessionaria} buscados com sucesso!",
+            "data": result
+        }, 200)
+    except Exception as e:
+        return  JSONResponse({
+            "status": False,
+            "message": "Erro ao buscar os carros!",
+            "erro": str(e)
+        }, 400)
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()

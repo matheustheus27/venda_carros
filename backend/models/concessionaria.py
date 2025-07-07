@@ -14,13 +14,13 @@ def index():
 
         return  JSONResponse({
             "status": True,
-            "message": "Concessionarias buscados com sucesso!",
+            "message": "Concessionarias buscadas com sucesso!",
             "data": result
         }, 200)
     except Exception as e:
         return  JSONResponse({
             "status": False,
-            "message": "Erro ao buscar os concessionarias!",
+            "message": "Erro ao buscar as concessionarias!",
             "erro": str(e)
         }, 400)
     finally:
@@ -46,12 +46,12 @@ def create(cnpj, nome, endereco, telefone=None):
 
         return  JSONResponse({
             "status": True,
-            "message": "Concessionaria criado com sucesso!"
+            "message": "Concessionaria criada com sucesso!"
         }, 201)
     except Exception as e:
         return  JSONResponse({
             "status": False,
-            "message": "Erro ao criar o concessionaria!",
+            "message": "Erro ao criar a concessionaria!",
             "erro": str(e)
         }, 400)
     finally:
@@ -77,13 +77,13 @@ def show(cnpj):
 
         return  JSONResponse({
             "status": True,
-            "message": "Concessionaria buscado com sucesso!",
+            "message": "Concessionaria buscada com sucesso!",
             "data": result
         }, 200)
     except Exception as e:
         return  JSONResponse({
             "status": False,
-            "message": "Erro ao buscar o concessionaria!",
+            "message": "Erro ao buscar a concessionaria!",
             "erro": str(e)
         }, 400)
     finally:
@@ -109,12 +109,12 @@ def update(cnpj, nome, endereco, telefone=None):
 
         return  JSONResponse({
             "status": True,
-            "message": "Concessionaria atualizado com sucesso!"
+            "message": "Concessionaria atualizada com sucesso!"
         }, 200)
     except Exception as e:
         return  JSONResponse({
             "status": False,
-            "message": "Erro ao atualizar o concessionaria!",
+            "message": "Erro ao atualizar a concessionaria!",
             "erro": str(e)
         }, 400)
     finally:
@@ -140,12 +140,12 @@ def delete(cnpj):
 
         return  JSONResponse({
             "status": True,
-            "message": "Concessionaria deletado com sucesso!"
+            "message": "Concessionaria deletada com sucesso!"
         }, 200)
     except Exception as e:
         return  JSONResponse({
             "status": False,
-            "message": "Erro ao deletar o concessionaria!",
+            "message": "Erro ao deletar a concessionaria!",
             "erro": str(e)
         }, 400)
     finally:

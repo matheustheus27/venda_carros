@@ -171,7 +171,7 @@ def find_by_vendedor(cpf_vendedor):
 
         return  JSONResponse({
             "status": True,
-            "message": "Vendas do vendedor {cpf_vendedor} buscadas com sucesso!",
+            "message": f"Vendas do vendedor {cpf_vendedor} buscadas com sucesso!",
             "data": result
         }, 200)
     except Exception as e:
@@ -203,7 +203,7 @@ def find_by_cliente(cpf_cliente):
 
         return  JSONResponse({
             "status": True,
-            "message": "Vendas do cliente {cpf_cliente} buscadas com sucesso!",
+            "message": f"Vendas para o cliente {cpf_cliente} buscadas com sucesso!",
             "data": result
         }, 200)
     except Exception as e:
@@ -235,7 +235,7 @@ def find_by_concessionaria(cnpj_concessionaria):
 
         return  JSONResponse({
             "status": True,
-            "message": "Vendas da concessionária {cnpj_concessionaria} buscadas com sucesso!",
+            "message": f"Vendas da concessionária {cnpj_concessionaria} buscadas com sucesso!",
             "data": result
         }, 200)
     except Exception as e:

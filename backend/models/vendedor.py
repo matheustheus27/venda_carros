@@ -153,3 +153,35 @@ def delete(cpf):
             cursor.close()
         if connection:
             connection.close()
+
+def find_by_concessionaria(cnpj_concessionaria):
+    connection = None
+    cursor = None
+
+    try:
+        connection = get_connection()
+
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT * FROM vendedor WHERE cnpj_concessionaria=%s",
+            (cnpj_concessionaria,)
+        )
+
+        result = cursor.fetchall()
+
+        return  JSONResponse({
+            "status": True,
+            "message": f"Vendedores da concessionária {cnpj_concessionaria} buscados com sucesso!",
+            "data": result
+        }, 200)
+    except Exception as e:
+        return  JSONResponse({
+            "status": False,
+            "message": "Erro ao buscar os vendedores!",
+            "erro": str(e)
+        }, 400)
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
