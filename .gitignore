@@ -1,0 +1,22 @@
+# Ignora diretórios __pycache__ em qualquer lugar do projeto
+__pycache__/
+**/__pycache__/
+
+# Ignora arquivos .pyc e .pyo
+*.pyc
+*.pyo
+
+# Ignora pastas e arquivos de IDEs como VSCode e PyCharm
+.vscode/
+.idea/
+
+# Ignora dependências criadas localmente (caso use virtualenv fora do contêiner)
+venv/
+.env/
+
+# Ignora logs
+*.log
+
+# Ignora arquivos do sistema operacional
+.DS_Store
+Thumbs.db
