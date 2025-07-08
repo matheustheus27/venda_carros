@@ -1,5 +1,5 @@
 from db import get_connection
-from fastapi.responses import JSONResponse
+from utils.responses import response_ok, response_error
 
 def index():
     connection = None
@@ -12,17 +12,15 @@ def index():
 
         result = cursor.fetchall()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Vendas buscadas com sucesso!",
-            "data": result
-        }, 200)
+        return response_ok(
+            message= "Vendas buscadas com sucesso!",
+            data= result
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao buscar as vendas!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao buscar as vendas!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -44,16 +42,15 @@ def create(cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data, va
 
         connection.commit()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Venda criada com sucesso!"
-        }, 201)
+        return response_ok(
+            message= "Venda criada com sucesso!",
+            status_code=201
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao criar a venda!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao criar a venda!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -75,17 +72,15 @@ def show(cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data):
 
         result = cursor.fetchone()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Venda buscada com sucesso!",
-            "data": result
-        }, 200)
+        return response_ok(
+            message= "Venda buscada com sucesso!",
+            data= result
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao buscar a venda!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao buscar a venda!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -107,16 +102,14 @@ def update(cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data, va
 
         connection.commit()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Venda atualizada com sucesso!"
-        }, 200)
+        return response_ok(
+            message= "Venda atualizada com sucesso!"
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao atualizar a venda!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao atualizar a venda!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -138,16 +131,14 @@ def delete(cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data):
 
         connection.commit()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Venda deletada com sucesso!"
-        }, 200)
+        return response_ok(
+            message= "Venda deletada com sucesso!"
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao deletar a venda!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao deletar a venda!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -169,17 +160,15 @@ def find_by_vendedor(cpf_vendedor):
 
         result = cursor.fetchall()
 
-        return  JSONResponse({
-            "status": True,
-            "message": f"Vendas do vendedor {cpf_vendedor} buscadas com sucesso!",
-            "data": result
-        }, 200)
+        return response_ok(
+            message= f"Vendas do vendedor {cpf_vendedor} buscadas com sucesso!",
+            data= result
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao buscar as vendas!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao buscar as vendas!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -201,17 +190,15 @@ def find_by_cliente(cpf_cliente):
 
         result = cursor.fetchall()
 
-        return  JSONResponse({
-            "status": True,
-            "message": f"Vendas para o cliente {cpf_cliente} buscadas com sucesso!",
-            "data": result
-        }, 200)
+        return response_ok(
+            message= f"Vendas para o cliente {cpf_cliente} buscadas com sucesso!",
+            data= result
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao buscar as vendas!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao buscar as vendas!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -233,17 +220,15 @@ def find_by_concessionaria(cnpj_concessionaria):
 
         result = cursor.fetchall()
 
-        return  JSONResponse({
-            "status": True,
-            "message": f"Vendas da concessionária {cnpj_concessionaria} buscadas com sucesso!",
-            "data": result
-        }, 200)
+        return  response_ok(
+            message= f"Vendas da concessionária {cnpj_concessionaria} buscadas com sucesso!",
+            data= result
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao buscar as vendas!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao buscar as vendas!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()

@@ -1,5 +1,5 @@
 from db import get_connection
-from fastapi.responses import JSONResponse
+from utils.responses import response_ok, response_error
 
 def index():
     connection = None
@@ -12,17 +12,15 @@ def index():
 
         result = cursor.fetchall()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Concessionarias buscadas com sucesso!",
-            "data": result
-        }, 200)
+        return response_ok(
+            message= "Concessionarias buscadas com sucesso!",
+            data= result
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao buscar as concessionarias!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao buscar as concessionarias!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -44,16 +42,15 @@ def create(cnpj, nome, endereco, telefone=None):
 
         connection.commit()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Concessionaria criada com sucesso!"
-        }, 201)
+        return response_ok(
+            message= "Concessionaria criada com sucesso!",
+            status_code= 201
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao criar a concessionaria!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao criar a concessionaria!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -75,17 +72,15 @@ def show(cnpj):
 
         result = cursor.fetchone()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Concessionaria buscada com sucesso!",
-            "data": result
-        }, 200)
+        return response_ok(
+            message= "Concessionaria buscada com sucesso!",
+            data= result
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao buscar a concessionaria!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao buscar a concessionaria!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -107,16 +102,14 @@ def update(cnpj, nome, endereco, telefone=None):
 
         connection.commit()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Concessionaria atualizada com sucesso!"
-        }, 200)
+        return response_ok(
+            message= "Concessionaria atualizada com sucesso!"
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao atualizar a concessionaria!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao atualizar a concessionaria!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -138,16 +131,14 @@ def delete(cnpj):
 
         connection.commit()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Concessionaria deletada com sucesso!"
-        }, 200)
+        return response_ok(
+            message= "Concessionaria deletada com sucesso!"
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao deletar a concessionaria!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao deletar a concessionaria!",
+            error= str(e)
+        )
     finally:
         if cursor:
             cursor.close()

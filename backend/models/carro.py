@@ -1,5 +1,5 @@
 from db import get_connection
-from fastapi.responses import JSONResponse
+from utils.responses import response_ok, response_error
 
 def index():
     connection = None
@@ -13,17 +13,15 @@ def index():
 
         result = cursor.fetchall()
 
-        return JSONResponse({
-            "status": True,
-            "message": "Carros buscados com sucesso!",
-            "data": result
-        }, 200)
+        return response_ok(
+            message= "Carros buscados com sucesso!",
+            data= result
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao buscar os carros!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao buscar os carros!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -45,16 +43,15 @@ def create(placa, marca, modelo, ano, cor, quilometragem, preco, status, cnpj_co
 
         connection.commit()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Carro criado com sucesso!"
-        }, 201)
+        return response_ok(
+            message= "Carro criado com sucesso!",
+            status_code=201
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao criar o carro!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao criar o carro!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -76,17 +73,15 @@ def show(placa):
 
         result = cursor.fetchone()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Carro buscado com sucesso!",
-            "data": result
-        }, 200)
+        return response_ok(
+            message= "Carro buscado com sucesso!",
+            data= result
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao buscar o carro!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao buscar o carro!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -108,16 +103,14 @@ def update(placa, marca, modelo, ano, cor, quilometragem, preco, status, cnpj_co
 
         connection.commit()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Carro atualizado com sucesso!"
-        }, 200)
+        return response_ok (
+            message= "Carro atualizado com sucesso!"
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao atualizar o carro!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao atualizar o carro!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -139,16 +132,14 @@ def delete(placa):
 
         connection.commit()
 
-        return  JSONResponse({
-            "status": True,
-            "message": "Carro deletado com sucesso!"
-        }, 200)
+        return response_ok(
+            message= "Carro deletado com sucesso!"
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao deletar o carro!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao deletar o carro!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
@@ -170,17 +161,15 @@ def find_by_concessionaria(cnpj_concessionaria):
 
         result = cursor.fetchall()
 
-        return  JSONResponse({
-            "status": True,
-            "message": f"Carros da concessionária {cnpj_concessionaria} buscados com sucesso!",
-            "data": result
-        }, 200)
+        return response_ok(
+            message= f"Carros da concessionária {cnpj_concessionaria} buscados com sucesso!",
+            data= result
+        )
     except Exception as e:
-        return  JSONResponse({
-            "status": False,
-            "message": "Erro ao buscar os carros!",
-            "erro": str(e)
-        }, 400)
+        return response_error(
+            message= "Erro ao buscar os carros!",
+            error= e
+        )
     finally:
         if cursor:
             cursor.close()
