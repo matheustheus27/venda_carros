@@ -23,7 +23,7 @@ router = APIRouter()
                                 "cor": "Preto",
                                 "quilometragem": 120000.55,
                                 "preco": 250000,
-                                "status": "Vendido",
+                                "status": "Disponivel",
                                 "cnpj_concessionaria": "12345678900000"
                             }
                         ]

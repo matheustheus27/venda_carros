@@ -53,7 +53,7 @@ def index():
     }
 )
 def create(data: VendaCreate):
-    return venda.create(data)
+    return venda.create(**data.model_dump())
 
 @router.get(
     '/{cpf_vendedor}/{cpf_cliente}/{placa_carro}/{cnpj_concessionaria}/{data_venda}',

@@ -49,7 +49,7 @@ def index():
     }
 )
 def create(data: VendedorCreate):
-    return vendedor.create(data)
+    return vendedor.create(**data.model_dump())
 
 @router.get(
     '/{cpf}',

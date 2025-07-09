@@ -12,6 +12,11 @@ def index():
 
         result = cursor.fetchall()
 
+        for venda in result:
+            venda["valor"] = float(venda["valor"])
+            venda["total_pago"] = float(venda["total_pago"])
+            venda["data"] = venda["data"].isoformat()
+
         return response_ok(
             message= "Vendas buscadas com sucesso!",
             data= result
@@ -71,6 +76,10 @@ def show(cpf_cliente, cpf_vendedor, placa_carro, cnpj_concessionaria, data):
         )
 
         result = cursor.fetchone()
+
+        result["valor"] = float(result["valor"])
+        result["total_pago"] = float(result["total_pago"])
+        result["data"] = result["data"].isoformat()
 
         return response_ok(
             message= "Venda buscada com sucesso!",
@@ -160,6 +169,11 @@ def find_by_vendedor(cpf_vendedor):
 
         result = cursor.fetchall()
 
+        for venda in result:
+            venda["valor"] = float(venda["valor"])
+            venda["total_pago"] = float(venda["total_pago"])
+            venda["data"] = venda["data"].isoformat()
+
         return response_ok(
             message= f"Vendas do vendedor {cpf_vendedor} buscadas com sucesso!",
             data= result
@@ -190,6 +204,11 @@ def find_by_cliente(cpf_cliente):
 
         result = cursor.fetchall()
 
+        for venda in result:
+            venda["valor"] = float(venda["valor"])
+            venda["total_pago"] = float(venda["total_pago"])
+            venda["data"] = venda["data"].isoformat()
+
         return response_ok(
             message= f"Vendas para o cliente {cpf_cliente} buscadas com sucesso!",
             data= result
@@ -219,6 +238,11 @@ def find_by_concessionaria(cnpj_concessionaria):
         )
 
         result = cursor.fetchall()
+
+        for venda in result:
+            venda["valor"] = float(venda["valor"])
+            venda["total_pago"] = float(venda["total_pago"])
+            venda["data"] = venda["data"].isoformat()
 
         return  response_ok(
             message= f"Vendas da concessionária {cnpj_concessionaria} buscadas com sucesso!",

@@ -13,6 +13,10 @@ def index():
 
         result = cursor.fetchall()
 
+        for carro in result:
+            carro["quilometragem"] = float(carro["quilometragem"])
+            carro["preco"] = float(carro["preco"])
+
         return response_ok(
             message= "Carros buscados com sucesso!",
             data= result
@@ -72,6 +76,9 @@ def show(placa):
         )
 
         result = cursor.fetchone()
+
+        result["quilometragem"] = float(result["quilometragem"])
+        result["preco"] = float(result["preco"])
 
         return response_ok(
             message= "Carro buscado com sucesso!",
@@ -160,6 +167,10 @@ def find_by_concessionaria(cnpj_concessionaria):
         )
 
         result = cursor.fetchall()
+
+        for carro in result:
+            carro["quilometragem"] = float(carro["quilometragem"])
+            carro["preco"] = float(carro["preco"])
 
         return response_ok(
             message= f"Carros da concessionária {cnpj_concessionaria} buscados com sucesso!",

@@ -10,7 +10,7 @@ class CarroCreate(BaseModel):
     cor: str = Field(..., example="Preto")
     quilometragem: Annotated[Decimal, condecimal(max_digits=20, decimal_places=2)] = Field(..., example=120000.55)
     preco: Annotated[Decimal, condecimal(max_digits=15, decimal_places=2)] = Field(..., example=250000)
-    status: str = Field(..., example="Vendido")
+    status: str = Field(..., example="Disponivel")
     cnpj_concessionaria: Annotated[str, constr(min_length=14, max_length=14)] = Field(..., example="12345678900000")
 
 class CarroUpdate(BaseModel):
