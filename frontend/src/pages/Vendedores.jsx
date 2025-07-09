@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "../services/api";
 import GenericTable from "../components/GenericTable";
+import ModalEditar from "../components/ModalEditar";
 
 export default function Vendedores() {
   const [vendedores, setVendedores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentVendedor, setCurrentVendedor] = useState(null);
 
   useEffect(() => {
     axios.get("/vendedores")
@@ -20,7 +24,42 @@ export default function Vendedores() {
   }, []);
 
   const handleEdit = (ven) => {
-    console.log("Editar carro:", ven);
+    setCurrentVendedor(ven);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setCurrentVendedor(null);
+  };
+
+  const handleSaveEdit = (updateVendedorData) => {
+    console.log("Salvando vendedor:", updateVendedorData);
+  
+    axios.put(
+      `/vendedores/${updateVendedorData.cpf}`,
+      {
+        nome: updateVendedorData.nome,
+        telefone: updateVendedorData.telefone,
+        email: updateVendedorData.email,
+        cnpj_concessionaria: updateVendedorData.cnpj_concessionaria
+      }
+    )
+    .then(res => {
+      console.log("Vendedor atualizada com sucesso!", res.data);
+      setVendedores(vendedores.map(v =>
+        v.cpf === updateVendedorData.cpf
+          ? { ...v, ...updateVendedorData }
+          : v
+      ));
+      handleCloseModal();
+      window.alert(res.data.message);
+    })
+    .catch(err => {
+      console.error("Erro ao atualizar vendedor:", err);
+      handleCloseModal();
+      window.alert(err.response.data.message);
+    });
   };
 
   const handleDelete = (ven) => {
@@ -33,11 +72,11 @@ export default function Vendedores() {
     }
   };
 
-  const carHeaders = [
+  const vendedorHeaders = [
     "CPF", "Nome", "Telefone", "Email", "CNPJ da Concessionária"
   ];
 
-  const renderCarRow = (v) => (
+  const renderVendedorRow = (v) => (
     <>
       <td className="py-2 px-4 border-b border-gray-200">{v.cpf}</td>
       <td className="py-2 px-4 border-b border-gray-200">{v.nome}</td>
@@ -47,7 +86,7 @@ export default function Vendedores() {
     </>
   );
 
-  const carActions = (v) => (
+  const vendedorActions = (v) => (
     <>
       <button
         onClick={() => handleEdit(v)}
@@ -66,6 +105,17 @@ export default function Vendedores() {
     </>
   );
 
+  const vendedoresLockedFields = [
+    { name: 'cpf', label: 'CPF' },
+  ];
+
+  const vendedoresEditableFields = [
+    { name: 'nome', label: 'Nome' },
+    { name: 'telefone', label: 'Telefone' },
+    { name: 'email', label: 'Email' },
+    { name: 'cnpj_concessionaria', label: 'CNPJ da Concessionária' },
+  ];
+
   if (loading) {
     return <p className="text-center p-4">Carregando vendedores...</p>;
   }
@@ -78,10 +128,20 @@ export default function Vendedores() {
     <div className="p-4"> {}
       <h2 className="text-2xl font-bold mb-4">Lista de Vendedores</h2>
       <GenericTable
-        headers={carHeaders}
+        headers={vendedorHeaders}
         data={vendedores}
-        renderRow={renderCarRow}
-        actions={carActions}
+        renderRow={renderVendedorRow}
+        actions={vendedorActions}
+      />
+    
+      <ModalEditar
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        entityData={currentVendedor}
+        onSave={handleSaveEdit}
+        title="Editar Vendedor"
+        lockedFieldsConfig={vendedoresLockedFields}
+        editableFieldsConfig={vendedoresEditableFields}
       />
     </div>
   );

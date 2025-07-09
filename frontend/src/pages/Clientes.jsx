@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "../services/api";
 import GenericTable from "../components/GenericTable";
+import ModalEditar from "../components/ModalEditar";
 
 export default function Clientes() {
   const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentCliente, setCurrentCliente] = useState(null);
 
   useEffect(() => {
     axios.get("/clientes")
@@ -20,7 +24,42 @@ export default function Clientes() {
   }, []);
 
   const handleEdit = (cli) => {
-    console.log("Editar carro:", cli);
+    setCurrentCliente(cli);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setCurrentCliente(null);
+  };
+
+  const handleSaveEdit = (updateClienteData) => {
+    console.log("Salvando cliente:", updateClienteData);
+  
+    axios.put(
+      `/clientes/${updateClienteData.cpf}`,
+      {
+        nome: updateClienteData.nome,
+        telefone: updateClienteData.telefone,
+        email: updateClienteData.email,
+        endereco: updateClienteData.endereco
+      }
+    )
+    .then(res => {
+      console.log("Cliente atualizada com sucesso!", res.data);
+      setClientes(clientes.map(c =>
+        c.cpf === updateClienteData.cpf
+          ? { ...c, ...updateClienteData }
+          : c
+      ));
+      handleCloseModal();
+      window.alert(res.data.message);
+    })
+    .catch(err => {
+      console.error("Erro ao atualizar cliente:", err);
+      handleCloseModal();
+      window.alert(err.response.data.message);
+    });
   };
 
   const handleDelete = (cli) => {
@@ -33,11 +72,11 @@ export default function Clientes() {
     }
   };
 
-  const carHeaders = [
+  const clienteHeaders = [
     "CPF", "Nome", "Telefone", "Email", "Endereço"
   ];
 
-  const renderCarRow = (c) => (
+  const renderClienteRow = (c) => (
     <>
       <td className="py-2 px-4 border-b border-gray-200">{c.cpf}</td>
       <td className="py-2 px-4 border-b border-gray-200">{c.nome}</td>
@@ -47,7 +86,7 @@ export default function Clientes() {
     </>
   );
 
-  const carActions = (c) => (
+  const clienteActions = (c) => (
     <>
       <button
         onClick={() => handleEdit(c)}
@@ -66,6 +105,17 @@ export default function Clientes() {
     </>
   );
 
+  const clientesLockedFields = [
+    { name: 'cpf', label: 'CPF' },
+  ];
+
+  const clientesEditableFields = [
+    { name: 'nome', label: 'Nome' },
+    { name: 'telefone', label: 'Telefone' },
+    { name: 'email', label: 'Email' },
+    { name: 'endereco', label: 'Endereço' },
+  ];
+
   if (loading) {
     return <p className="text-center p-4">Carregando clientes...</p>;
   }
@@ -78,10 +128,20 @@ export default function Clientes() {
     <div className="p-4"> {}
       <h2 className="text-2xl font-bold mb-4">Lista de Clientes</h2>
       <GenericTable
-        headers={carHeaders}
+        headers={clienteHeaders}
         data={clientes}
-        renderRow={renderCarRow}
-        actions={carActions}
+        renderRow={renderClienteRow}
+        actions={clienteActions}
+      />
+
+      <ModalEditar
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        entityData={currentCliente}
+        onSave={handleSaveEdit}
+        title="Editar Cliente"
+        lockedFieldsConfig={clientesLockedFields}
+        editableFieldsConfig={clientesEditableFields}
       />
     </div>
   );

@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "../services/api";
 import GenericTable from "../components/GenericTable";
+import ModalEditar from "../components/ModalEditar";
 
 export default function Concessionarias() {
   const [concessionarias, setConcessionarias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentConcessionaria, setCurrentConcessionaria] = useState(null);
 
   useEffect(() => {
     axios.get("/concessionarias")
@@ -20,7 +24,41 @@ export default function Concessionarias() {
   }, []);
 
   const handleEdit = (con) => {
-    console.log("Editar concessionaria:", con);
+    setCurrentConcessionaria(con);
+    setIsModalOpen(true);
+  };
+  
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setCurrentConcessionaria(null);
+  };
+  
+  const handleSaveEdit = (updateConcessionariaData) => {
+    console.log("Salvando concessionária:", updateConcessionariaData);
+    
+    axios.put(
+      `/concessionarias/${updateConcessionariaData.cnpj}`,
+      {
+        nome: updateConcessionariaData.nome,
+        telefone: updateConcessionariaData.telefone,
+        endereco: updateConcessionariaData.endereco
+      }
+    )
+    .then(res => {
+      console.log("Concessionaria atualizada com sucesso!", res.data);
+      setConcessionarias(concessionarias.map(c =>
+        c.cpf === updateConcessionariaData.cpf
+          ? { ...c, ...updateConcessionariaData }
+          : c
+      ));
+      handleCloseModal();
+      window.alert(res.data.message);
+    })
+    .catch(err => {
+      console.error("Erro ao atualizar concessionaria:", err);
+      handleCloseModal();
+      window.alert(err.response.data.message);
+    });
   };
 
   const handleDelete = (con) => {
@@ -33,11 +71,11 @@ export default function Concessionarias() {
     }
   };
 
-  const carHeaders = [
+  const concessionariaHeaders = [
     "CNPJ", "Nome", "Telefone", "Endereço"
   ];
 
-  const renderCarRow = (c) => (
+  const renderConcessionariaRow = (c) => (
     <>
       <td className="py-2 px-4 border-b border-gray-200">{c.cnpj}</td>
       <td className="py-2 px-4 border-b border-gray-200">{c.nome}</td>
@@ -46,7 +84,7 @@ export default function Concessionarias() {
     </>
   );
 
-  const carActions = (c) => (
+  const concessionariaActions = (c) => (
     <>
       <button
         onClick={() => handleEdit(c)}
@@ -65,6 +103,16 @@ export default function Concessionarias() {
     </>
   );
 
+  const concessionariasLockedFields = [
+    { name: 'cnpj', label: 'CNPJ' },
+  ];
+
+  const concessionariasEditableFields = [
+    { name: 'nome', label: 'Nome' },
+    { name: 'telefone', label: 'Telefone' },
+    { name: 'endereco', label: 'Endereço' },
+  ];
+
   if (loading) {
     return <p className="text-center p-4">Carregando concessionarias...</p>;
   }
@@ -77,10 +125,20 @@ export default function Concessionarias() {
     <div className="p-4"> {}
       <h2 className="text-2xl font-bold mb-4">Lista de Concessionárias</h2>
       <GenericTable
-        headers={carHeaders}
+        headers={concessionariaHeaders}
         data={concessionarias}
-        renderRow={renderCarRow}
-        actions={carActions}
+        renderRow={renderConcessionariaRow}
+        actions={concessionariaActions}
+      />
+
+      <ModalEditar
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        entityData={currentConcessionaria}
+        onSave={handleSaveEdit}
+        title="Editar Concessionária"
+        lockedFieldsConfig={concessionariasLockedFields}
+        editableFieldsConfig={concessionariasEditableFields}
       />
     </div>
   );
