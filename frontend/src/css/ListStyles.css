@@ -1,0 +1,95 @@
+.generic-table-container {
+  margin: 20px;
+  overflow-x: auto;
+}
+
+.generic-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.generic-table-container th,
+.generic-table-container td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.generic-table-container th {
+  background-color: #f2f2f2;
+  color: #333;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.generic-table-container .odd-row {
+  background-color: #f9f9f9;
+}
+
+.generic-table-container .even-row {
+  background-color: #e6f7ff;
+}
+
+.generic-table-container tbody tr:hover {
+  background-color: #d9edf7;
+  cursor: pointer;
+}
+
+.generic-table-container .actions-cell {
+  white-space: nowrap;
+  text-align: center;
+}
+
+.generic-table-container .action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin: 0 5px;
+  padding: 5px;
+  transition: color 0.2s ease-in-out;
+}
+
+.generic-table-container .action-button.edit {
+  color: #333;
+}
+
+.generic-table-container .action-button.edit:hover {
+  color: #007bff;
+}
+
+.generic-table-container .action-button.delete {
+  color: #333;
+}
+
+.generic-table-container .action-button.delete:hover {
+  color: #dc3545;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
+
+.generic-table-container {
+  margin: 20px;
+  overflow-x: auto;
+}
+
+.generic-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}

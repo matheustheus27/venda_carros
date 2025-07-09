@@ -1,0 +1,46 @@
+.Header-title {
+  background-color: #260CB8;
+  height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+.Nav-bar {
+  background-color: #EAEBFF;
+  padding: 1rem;
+  display: flex;
+  justify-content: left;
+  gap: 1.5rem;
+  font-size: 1rem;
+}
+
+.nav-link-item {
+  text-decoration: none;
+  color: #333;
+  background-color: #e0e0fa;
+  padding: 10px 20px;
+  border-radius: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.nav-link-item:hover {
+  background-color: #d0d0eb;
+  color: #1a1a1a;
+}
+
+.nav-link-item.active-tab {
+  background-color: #a0a0d0;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.nav-link-item span {
+  margin-right: 5px;
+}
