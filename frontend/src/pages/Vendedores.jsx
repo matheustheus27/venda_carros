@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "../services/api";
 import GenericTable from "../components/GenericTable";
-import ModalEditar from "../components/ModalEditar";
+import Modal from "../components/Modal";
+import '../css/Header.css';
 
 export default function Vendedores() {
   const [vendedores, setVendedores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsEditModalOpen] = useState(false);
   const [currentVendedor, setCurrentVendedor] = useState(null);
+
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false); 
+  const [newVendedorData, setNewVendedorData] = useState(null);
 
   useEffect(() => {
     axios.get("/vendedores")
@@ -23,13 +27,45 @@ export default function Vendedores() {
       });
   }, []);
 
-  const handleEdit = (ven) => {
-    setCurrentVendedor(ven);
-    setIsModalOpen(true);
+  const handleAdd = () => {
+      setNewVendedorData({});
+      setIsAddModalOpen(true);
+    };
+  
+  const handleCloseAddModal = () => {
+    setIsAddModalOpen(false);
+    setNewVendedorData(null);
+  };
+  
+  const handleSaveAdd = (newVendedorFormData) => {
+    console.log("Adicionando novo vendedor:", newVendedorFormData);
+  
+    axios.post("/vendedores", {
+      cpf: newVendedorFormData.cpf,
+      nome: newVendedorFormData.nome,
+      telefone: newVendedorFormData.telefone,
+      email: newVendedorFormData.email,
+      cnpj_concessionaria: newVendedorFormData.cnpj_concessionaria,
+    })
+    .then(res => {
+      setVendedores([...vendedores, newVendedorFormData]);
+      handleCloseAddModal();
+      window.alert(res.data.message);
+    })
+    .catch(err => {
+      console.error("Erro ao adicionar vendedor:", err);
+      handleCloseAddModal();
+      window.alert(err.response.data.message);
+    });
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleEdit = (ven) => {
+    setCurrentVendedor(ven);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
     setCurrentVendedor(null);
   };
 
@@ -52,12 +88,12 @@ export default function Vendedores() {
           ? { ...v, ...updateVendedorData }
           : v
       ));
-      handleCloseModal();
+      handleCloseEditModal();
       window.alert(res.data.message);
     })
     .catch(err => {
       console.error("Erro ao atualizar vendedor:", err);
-      handleCloseModal();
+      handleCloseEditModal();
       window.alert(err.response.data.message);
     });
   };
@@ -116,6 +152,14 @@ export default function Vendedores() {
     { name: 'cnpj_concessionaria', label: 'CNPJ da Concessionária' },
   ];
 
+  const vendedoresAddFields = [
+    { name: 'cpf', label: 'CPF' },
+    { name: 'nome', label: 'Nome' },
+    { name: 'telefone', label: 'Telefone' },
+    { name: 'email', label: 'Email' },
+    { name: 'cnpj_concessionaria', label: 'cnpj_concessionaria' },
+  ];
+
   if (loading) {
     return <p className="text-center p-4">Carregando vendedores...</p>;
   }
@@ -126,7 +170,15 @@ export default function Vendedores() {
 
   return (
     <div className="p-4"> {}
-      <h2 className="text-2xl font-bold mb-4">Lista de Vendedores</h2>
+      <h2 className="header-left-spacing">Lista de Vendedores</h2>
+      <div className="mb-4"> {}
+        <button
+          onClick={handleAdd}
+          className="add-button-style"
+        >
+          <span className="mr-2">➕</span> Adicionar
+        </button>
+      </div>
       <GenericTable
         headers={vendedorHeaders}
         data={vendedores}
@@ -134,14 +186,24 @@ export default function Vendedores() {
         actions={vendedorActions}
       />
     
-      <ModalEditar
+      <Modal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={handleCloseEditModal}
         entityData={currentVendedor}
         onSave={handleSaveEdit}
         title="Editar Vendedor"
         lockedFieldsConfig={vendedoresLockedFields}
         editableFieldsConfig={vendedoresEditableFields}
+      />
+
+      <Modal
+        isOpen={isAddModalOpen}
+        onClose={handleCloseAddModal}
+        entityData={newVendedorData}
+        onSave={handleSaveAdd}
+        title="Adicionar Novo Vendedor"
+        lockedFieldsConfig={[]}
+        editableFieldsConfig={vendedoresAddFields}
       />
     </div>
   );

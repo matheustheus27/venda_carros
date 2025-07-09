@@ -44,3 +44,10 @@
 .nav-link-item span {
   margin-right: 5px;
 }
+
+.header-left-spacing {
+  margin-left: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}

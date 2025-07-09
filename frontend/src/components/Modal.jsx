@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../css/Modal.css';
 
-export default function ModalEditar({
+export default function Modal({
   isOpen,
   onClose,
   entityData,

@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import axios from "../services/api";
 import GenericTable from "../components/GenericTable";
-import ModalEditar from "../components/ModalEditar";
+import Modal from "../components/Modal";
+import '../css/Modal.css';
+import '../css/Header.css';
 
 export default function Vendas() {
   const [vendas, setVendas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsEditModalOpen] = useState(false);
   const [currentVenda, setCurrentVenda] = useState(null);
+
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false); 
+  const [newVendaData, setNewVendaData] = useState(null);
 
   useEffect(() => {
     axios.get("/vendas")
@@ -24,13 +29,48 @@ export default function Vendas() {
       });
   }, []);
 
-  const handleEdit = (ven) => {
-    setCurrentVenda(ven);
-    setIsModalOpen(true);
+  const handleAdd = () => {
+    setNewVendaData({});
+    setIsAddModalOpen(true);
+  };
+  
+  const handleCloseAddModal = () => {
+    setIsAddModalOpen(false);
+    setNewVendaData(null);
+  };
+  
+  const handleSaveAdd = (newVendaFormData) => {
+    console.log("Adicionando novo venda:", newVendaFormData);
+  
+    axios.post("/vendas", {
+      cpf_cliente: newVendaFormData.cpf_cliente,
+      cpf_vendedor: newVendaFormData.cpf_vendedor,
+      placa_carro: newVendaFormData.placa_carro,
+      cnpj_concessionaria: newVendaFormData.cnpj_concessionaria,
+      data: newVendaFormData.data,
+      valor: parseFloat(newVendaFormData.valor),
+      tipo_pagamento: newVendaFormData.tipo_pagamento,
+      total_pago: parseFloat(newVendaFormData.total_pago),
+    })
+    .then(res => {
+      setVendas([...vendas, newVendaFormData]);
+      handleCloseAddModal();
+      window.alert(res.data.message);
+    })
+    .catch(err => {
+      console.error("Erro ao adicionar venda:", err);
+      handleCloseAddModal();
+      window.alert(err.response.data.message);
+    });
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleEdit = (ven) => {
+    setCurrentVenda(ven);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
     setCurrentVenda(null);
   };
 
@@ -56,12 +96,12 @@ export default function Vendas() {
           ? { ...v, ...updateVendaData }
           : v
       ));
-      handleCloseModal();
+      handleCloseEditModal();
       window.alert(res.data.message);
     })
     .catch(err => {
       console.error("Erro ao atualizar venda:", err);
-      handleCloseModal();
+      handleCloseEditModal();
       window.alert(err.response.data.message);
     });
   };
@@ -95,7 +135,7 @@ export default function Vendas() {
       <td className="py-2 px-4 border-b border-gray-200">{v.cpf_vendedor}</td>
       <td className="py-2 px-4 border-b border-gray-200">{v.placa_carro}</td>
       <td className="py-2 px-4 border-b border-gray-200">{v.cnpj_concessionaria}</td>
-      <td className="py-2 px-4 border-b border-gray-200">{v.data}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{v.data ? new Date(v.data + 'T00:00:00').toLocaleDateString('pt-BR') : ''}</td>
       <td className="py-2 px-4 border-b border-gray-200">
         R$ {parseFloat(v.valor).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
       </td>
@@ -139,6 +179,17 @@ export default function Vendas() {
     { name: 'total_pago', label: 'Total Pago', type: 'number' },
   ];
 
+  const vendasAddFields = [
+    { name: 'cpf_cliente', label: 'CPF do Cliente' },
+    { name: 'cpf_vendedor', label: 'CPF do Vendedor' },
+    { name: 'placa_carro', label: 'Placa do Carro' },
+    { name: 'cnpj_concessionaria', label: 'CNPJ da Concessionária' },
+    { name: 'data', label: 'Data da Venda', type: 'date' },
+    { name: 'valor', label: 'Valor', type: 'number' },
+    { name: 'tipo_pagamento', label: 'Tipo de Pagamento' },
+    { name: 'total_pago', label: 'Total Pago', type: 'number' },
+  ];
+
   if (loading) {
     return <p className="text-center p-4">Carregando vendas...</p>;
   }
@@ -149,7 +200,15 @@ export default function Vendas() {
 
   return (
     <div className="p-4"> {}
-      <h2 className="text-2xl font-bold mb-4">Lista de Vendas</h2>
+      <h2 className="header-left-spacing">Lista de Vendas</h2>
+      <div className="mb-4"> {}
+        <button
+          onClick={handleAdd}
+          className="add-button-style"
+        >
+          <span className="mr-2">➕</span> Adicionar
+        </button>
+      </div>
       <GenericTable
         headers={vendaHeaders}
         data={vendas}
@@ -157,14 +216,24 @@ export default function Vendas() {
         actions={vendaActions}
       />
 
-      <ModalEditar
+      <Modal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={handleCloseEditModal}
         entityData={currentVenda}
         onSave={handleSaveEdit}
         title="Editar Venda"
         lockedFieldsConfig={vendasLockedFields}
         editableFieldsConfig={vendasEditableFields}
+      />
+
+      <Modal
+        isOpen={isAddModalOpen}
+        onClose={handleCloseAddModal}
+        entityData={newVendaData}
+        onSave={handleSaveAdd}
+        title="Adicionar Nova Venda"
+        lockedFieldsConfig={[]}
+        editableFieldsConfig={vendasAddFields}
       />
     </div>
   );

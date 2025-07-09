@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
 import axios from "../services/api";
 import GenericTable from "../components/GenericTable";
-import ModalEditar from "../components/ModalEditar";
+import Modal from "../components/Modal";
+import '../css/Modal.css';
+import '../css/Header.css';
+import '../css/Header.css';
 
 export default function Clientes() {
   const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsEditModalOpen] = useState(false);
   const [currentCliente, setCurrentCliente] = useState(null);
+
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false); 
+  const [newClienteData, setNewClienteData] = useState(null);
 
   useEffect(() => {
     axios.get("/clientes")
@@ -23,13 +29,45 @@ export default function Clientes() {
       });
   }, []);
 
-  const handleEdit = (cli) => {
-    setCurrentCliente(cli);
-    setIsModalOpen(true);
+  const handleAdd = () => {
+    setNewClienteData({});
+    setIsAddModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleCloseAddModal = () => {
+    setIsAddModalOpen(false);
+    setNewClienteData(null);
+  };
+
+  const handleSaveAdd = (newClienteFormData) => {
+    console.log("Adicionando novo cliente:", newClienteFormData);
+
+    axios.post("/clientes", {
+      cpf: newClienteFormData.cpf,
+      nome: newClienteFormData.nome,
+      telefone: newClienteFormData.telefone,
+      email: newClienteFormData.email,
+      endereco: newClienteFormData.endereco,
+    })
+    .then(res => {
+      setClientes([...clientes, newClienteFormData]);
+      handleCloseAddModal();
+      window.alert(res.data.message);
+    })
+    .catch(err => {
+      console.error("Erro ao adicionar cliente:", err);
+      handleCloseAddModal();
+      window.alert(err.response.data.message);
+    });
+  };
+
+  const handleEdit = (cli) => {
+    setCurrentCliente(cli);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
     setCurrentCliente(null);
   };
 
@@ -52,12 +90,12 @@ export default function Clientes() {
           ? { ...c, ...updateClienteData }
           : c
       ));
-      handleCloseModal();
+      handleCloseEditModal();
       window.alert(res.data.message);
     })
     .catch(err => {
       console.error("Erro ao atualizar cliente:", err);
-      handleCloseModal();
+      handleCloseEditModal();
       window.alert(err.response.data.message);
     });
   };
@@ -116,6 +154,14 @@ export default function Clientes() {
     { name: 'endereco', label: 'Endereço' },
   ];
 
+  const clientesAddFields = [
+    { name: 'cpf', label: 'CPF' },
+    { name: 'nome', label: 'Nome' },
+    { name: 'telefone', label: 'Telefone' },
+    { name: 'email', label: 'Email' },
+    { name: 'endereco', label: 'Endereço' },
+  ];
+
   if (loading) {
     return <p className="text-center p-4">Carregando clientes...</p>;
   }
@@ -126,7 +172,15 @@ export default function Clientes() {
 
   return (
     <div className="p-4"> {}
-      <h2 className="text-2xl font-bold mb-4">Lista de Clientes</h2>
+      <h2 className="header-left-spacing">Lista de Clientes</h2>
+      <div className="mb-4"> {}
+        <button
+          onClick={handleAdd}
+          className="add-button-style"
+        >
+          <span className="mr-2">➕</span> Adicionar
+        </button>
+      </div>
       <GenericTable
         headers={clienteHeaders}
         data={clientes}
@@ -134,14 +188,24 @@ export default function Clientes() {
         actions={clienteActions}
       />
 
-      <ModalEditar
+      <Modal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={handleCloseEditModal}
         entityData={currentCliente}
         onSave={handleSaveEdit}
         title="Editar Cliente"
         lockedFieldsConfig={clientesLockedFields}
         editableFieldsConfig={clientesEditableFields}
+      />
+
+      <Modal
+        isOpen={isAddModalOpen}
+        onClose={handleCloseAddModal}
+        entityData={newClienteData}
+        onSave={handleSaveAdd}
+        title="Adicionar Novo Cliente"
+        lockedFieldsConfig={[]}
+        editableFieldsConfig={clientesAddFields}
       />
     </div>
   );

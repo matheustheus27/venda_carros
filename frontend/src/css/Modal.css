@@ -18,7 +18,7 @@
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   padding: 2rem;
   width: 100%;
-  max-width: 36rem;
+  max-width: 48rem;
   box-sizing: border-box;
 }
 
@@ -62,36 +62,29 @@
 
 .modal-grid-container {
   display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 @media (min-width: 768px) {
-  .modal-grid-container.locked-fields {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .modal-grid-container.locked-fields,
+  .modal-grid-container.editable-fields {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    justify-content: center;
   }
 }
 
 @media (min-width: 1024px) {
-  .modal-grid-container.locked-fields {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 768px) {
+  .modal-grid-container.locked-fields,
   .modal-grid-container.editable-fields {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .modal-grid-container.editable-fields {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 }
 
 .modal-input-group {
   margin-bottom: 1rem;
+  max-width: 300px;
 }
 
 .modal-input-label {
@@ -162,4 +155,30 @@
 
 .modal-button.save:hover {
   background-color: #2563eb;
+}
+
+.add-button-style {
+  text-decoration: none;
+  color: #333;
+  background-color: #e0e0fa;
+  padding: 10px 20px;
+  border-radius: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: Arial, sans-serif;
+  margin-left: 1rem;
+}
+
+.add-button-style:hover {
+  background-color: #d0d0eb;
+  color: #1a1a1a;
+}
+
+.add-button-style span {
+  margin-right: 5px;
 }

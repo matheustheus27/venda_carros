@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import axios from "../services/api";
 import GenericTable from "../components/GenericTable";
-import ModalEditar from "../components/ModalEditar";
+import Modal from "../components/Modal";
+import '../css/Modal.css';
+import '../css/Header.css';
 
 export default function Carros() {
   const [carros, setCarros] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsEditModalOpen] = useState(false);
   const [currentCarro, setCurrentCarro] = useState(null);
+
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false); 
+  const [newCarroData, setNewCarroData] = useState(null);
 
   useEffect(() => {
     axios.get("/carros")
@@ -24,13 +29,49 @@ export default function Carros() {
       });
   }, []);
 
-  const handleEdit = (con) => {
-    setCurrentCarro(con);
-    setIsModalOpen(true);
+  const handleAdd = () => {
+      setNewCarroData({});
+      setIsAddModalOpen(true);
+    };
+  
+  const handleCloseAddModal = () => {
+    setIsAddModalOpen(false);
+    setNewCarroData(null);
   };
   
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleSaveAdd = (newCarroFormData) => {
+    console.log("Adicionando novo carro:", newCarroFormData);
+  
+    axios.post("/carros", {
+      placa: newCarroFormData.placa,
+      marca: newCarroFormData.marca,
+      modelo: newCarroFormData.modelo,
+      ano: parseInt(newCarroFormData.ano),
+      cor: newCarroFormData.cor,
+      quilometragem: parseFloat(newCarroFormData.quilometragem),
+      preco: parseFloat(newCarroFormData.preco),
+      status: newCarroFormData.status,
+      cnpj_concessionaria: newCarroFormData.cnpj_concessionaria,
+    })
+    .then(res => {
+      setCarros([...carros, newCarroFormData]);
+      handleCloseAddModal();
+      window.alert(res.data.message);
+    })
+    .catch(err => {
+      console.error("Erro ao adicionar carro:", err);
+      handleCloseAddModal();
+      window.alert(err.response.data.message);
+    });
+  };
+
+  const handleEdit = (con) => {
+    setCurrentCarro(con);
+    setIsEditModalOpen(true);
+  };
+  
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
     setCurrentCarro(null);
   };
   
@@ -57,12 +98,12 @@ export default function Carros() {
           ? { ...c, ...updateCarroData }
           : c
       ));
-      handleCloseModal();
+      handleCloseEditModal();
       window.alert(res.data.message);
     })
     .catch(err => {
       console.error("Erro ao atualizar carro:", err);
-      handleCloseModal();
+      handleCloseEditModal();
       window.alert(err.response.data.message);
     });
   };
@@ -134,6 +175,18 @@ export default function Carros() {
     { name: 'cnpj_concessionaria', label: 'cnpj_concessionaria' },
   ];
 
+  const carrosAddFields = [
+    { name: 'placa', label: 'Placa do Carro' },
+    { name: 'marca', label: 'Marca' },
+    { name: 'modelo', label: 'Modelo' },
+    { name: 'ano', label: 'Ano', type: 'number' },
+    { name: 'cor', label: 'Cor' },
+    { name: 'quilometragem', label: 'Quilometragem', type: 'number' },
+    { name: 'preco', label: 'Preço', type: 'number' },
+    { name: 'status', label: 'Status' },
+    { name: 'cnpj_concessionaria', label: 'CNPJ da Concessionária' },
+  ];
+
   if (loading) {
     return <p className="text-center p-4">Carregando carros...</p>;
   }
@@ -144,7 +197,15 @@ export default function Carros() {
 
   return (
     <div className="p-4"> {}
-      <h2 className="text-2xl font-bold mb-4">Lista de Carros</h2>
+      <h2 className="header-left-spacing">Lista de Carros</h2>
+      <div className="mb-4"> {}
+        <button
+          onClick={handleAdd}
+          className="add-button-style"
+        >
+          <span className="mr-2">➕</span> Adicionar
+        </button>
+      </div>
       <GenericTable
         headers={carroHeaders}
         data={carros}
@@ -152,14 +213,24 @@ export default function Carros() {
         actions={carroActions}
       />
 
-      <ModalEditar
+      <Modal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={handleCloseEditModal}
         entityData={currentCarro}
         onSave={handleSaveEdit}
         title="Editar Carro"
         lockedFieldsConfig={carrosLockedFields}
         editableFieldsConfig={carrosEditableFields}
+      />
+
+      <Modal
+        isOpen={isAddModalOpen}
+        onClose={handleCloseAddModal}
+        entityData={newCarroData}
+        onSave={handleSaveAdd}
+        title="Adicionar Novo Carro"
+        lockedFieldsConfig={[]}
+        editableFieldsConfig={carrosAddFields}
       />
     </div>
   );

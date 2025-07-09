@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import axios from "../services/api";
 import GenericTable from "../components/GenericTable";
-import ModalEditar from "../components/ModalEditar";
+import Modal from "../components/Modal";
+import '../css/Modal.css';
+import '../css/Header.css';
 
 export default function Concessionarias() {
   const [concessionarias, setConcessionarias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsEditModalOpen] = useState(false);
   const [currentConcessionaria, setCurrentConcessionaria] = useState(null);
+
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false); 
+  const [newConcessionariaData, setNewConcessionariaData] = useState(null);
 
   useEffect(() => {
     axios.get("/concessionarias")
@@ -23,13 +28,44 @@ export default function Concessionarias() {
       });
   }, []);
 
-  const handleEdit = (con) => {
-    setCurrentConcessionaria(con);
-    setIsModalOpen(true);
+  const handleAdd = () => {
+      setNewConcessionariaData({});
+      setIsAddModalOpen(true);
+    };
+  
+  const handleCloseAddModal = () => {
+    setIsAddModalOpen(false);
+    setNewConcessionariaData(null);
   };
   
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleSaveAdd = (newConcessionariaFormData) => {
+    console.log("Adicionando nova concessionária:", newConcessionariaFormData);
+  
+    axios.post("/concessionarias", {
+      cnpj: newConcessionariaFormData.cnpj,
+      nome: newConcessionariaFormData.nome,
+      telefone: newConcessionariaFormData.telefone,
+      endereco: newConcessionariaFormData.endereco,
+    })
+    .then(res => {
+      setConcessionarias([...concessionarias, newConcessionariaFormData]);
+      handleCloseAddModal();
+      window.alert(res.data.message);
+    })
+    .catch(err => {
+      console.error("Erro ao adicionar concessionária:", err);
+      handleCloseAddModal();
+      window.alert(err.response.data.message);
+    });
+  };
+
+  const handleEdit = (con) => {
+    setCurrentConcessionaria(con);
+    setIsEditModalOpen(true);
+  };
+  
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
     setCurrentConcessionaria(null);
   };
   
@@ -51,12 +87,12 @@ export default function Concessionarias() {
           ? { ...c, ...updateConcessionariaData }
           : c
       ));
-      handleCloseModal();
+      handleCloseEditModal();
       window.alert(res.data.message);
     })
     .catch(err => {
       console.error("Erro ao atualizar concessionaria:", err);
-      handleCloseModal();
+      handleCloseEditModal();
       window.alert(err.response.data.message);
     });
   };
@@ -113,6 +149,13 @@ export default function Concessionarias() {
     { name: 'endereco', label: 'Endereço' },
   ];
 
+  const concessionariasAddFields = [
+    { name: 'cnpj', label: 'CNPJ' },
+    { name: 'nome', label: 'Nome' },
+    { name: 'telefone', label: 'Telefone' },
+    { name: 'endereco', label: 'Endereço' },
+  ];
+
   if (loading) {
     return <p className="text-center p-4">Carregando concessionarias...</p>;
   }
@@ -123,7 +166,15 @@ export default function Concessionarias() {
 
   return (
     <div className="p-4"> {}
-      <h2 className="text-2xl font-bold mb-4">Lista de Concessionárias</h2>
+      <h2 className="header-left-spacing">Lista de Concessionárias</h2>
+      <div className="mb-4"> {}
+        <button
+          onClick={handleAdd}
+          className="add-button-style"
+        >
+          <span className="mr-2">➕</span> Adicionar
+        </button>
+      </div>
       <GenericTable
         headers={concessionariaHeaders}
         data={concessionarias}
@@ -131,14 +182,24 @@ export default function Concessionarias() {
         actions={concessionariaActions}
       />
 
-      <ModalEditar
+      <Modal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={handleCloseEditModal}
         entityData={currentConcessionaria}
         onSave={handleSaveEdit}
         title="Editar Concessionária"
         lockedFieldsConfig={concessionariasLockedFields}
         editableFieldsConfig={concessionariasEditableFields}
+      />
+
+      <Modal
+        isOpen={isAddModalOpen}
+        onClose={handleCloseAddModal}
+        entityData={newConcessionariaData}
+        onSave={handleSaveAdd}
+        title="Adicionar Nova Concessionária"
+        lockedFieldsConfig={[]}
+        editableFieldsConfig={concessionariasAddFields}
       />
     </div>
   );
