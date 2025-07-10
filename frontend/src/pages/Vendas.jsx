@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { formatCpf, formatCnpj, formatDate, formatCurrency } from "../utils/formattypes";
 import axios from "../services/api";
 import GenericTable from "../components/GenericTable";
 import Modal from "../components/Modal";
@@ -131,18 +132,14 @@ export default function Vendas() {
 
   const renderVendaRow = (v) => (
     <>
-      <td className="py-2 px-4 border-b border-gray-200">{v.cpf_cliente}</td>
-      <td className="py-2 px-4 border-b border-gray-200">{v.cpf_vendedor}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatCpf(v.cpf_cliente)}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatCpf(v.cpf_vendedor)}</td>
       <td className="py-2 px-4 border-b border-gray-200">{v.placa_carro}</td>
-      <td className="py-2 px-4 border-b border-gray-200">{v.cnpj_concessionaria}</td>
-      <td className="py-2 px-4 border-b border-gray-200">{v.data ? new Date(v.data + 'T00:00:00').toLocaleDateString('pt-BR') : ''}</td>
-      <td className="py-2 px-4 border-b border-gray-200">
-        R$ {parseFloat(v.valor).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-      </td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatCnpj(v.cnpj_concessionaria)}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatDate(v.data)}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatCurrency(v.valor)}</td>
       <td className="py-2 px-4 border-b border-gray-200">{v.tipo_pagamento}</td>
-      <td className="py-2 px-4 border-b border-gray-200">
-        R$ {parseFloat(v.total_pago).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-      </td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatCurrency(v.total_pago)}</td>
     </>
   );
 
@@ -166,28 +163,28 @@ export default function Vendas() {
   );
 
   const vendasLockedFields = [
-    { name: 'cpf_cliente', label: 'CPF do Cliente' },
-    { name: 'cpf_vendedor', label: 'CPF do Vendedor' },
+    { name: 'cpf_cliente', label: 'CPF do Cliente', formatter: formatCpf },
+    { name: 'cpf_vendedor', label: 'CPF do Vendedor', formatter: formatCpf },
     { name: 'placa_carro', label: 'Placa do Carro' },
-    { name: 'cnpj_concessionaria', label: 'CNPJ da Concessionária' },
+    { name: 'cnpj_concessionaria', label: 'CNPJ da Concessionária', formatter: formatCnpj },
     { name: 'data', label: 'Data da Venda', type: 'date' },
   ];
 
   const vendasEditableFields = [
-    { name: 'valor', label: 'Valor', type: 'number' },
+    { name: 'valor', label: 'Valor', type: 'number', formatter: formatCurrency },
     { name: 'tipo_pagamento', label: 'Tipo de Pagamento' },
-    { name: 'total_pago', label: 'Total Pago', type: 'number' },
+    { name: 'total_pago', label: 'Total Pago', type: 'number', formatter: formatCurrency },
   ];
 
   const vendasAddFields = [
-    { name: 'cpf_cliente', label: 'CPF do Cliente' },
-    { name: 'cpf_vendedor', label: 'CPF do Vendedor' },
+    { name: 'cpf_cliente', label: 'CPF do Cliente', formatter: formatCpf },
+    { name: 'cpf_vendedor', label: 'CPF do Vendedor', formatter: formatCpf },
     { name: 'placa_carro', label: 'Placa do Carro' },
-    { name: 'cnpj_concessionaria', label: 'CNPJ da Concessionária' },
+    { name: 'cnpj_concessionaria', label: 'CNPJ da Concessionária', formatter: formatCnpj },
     { name: 'data', label: 'Data da Venda', type: 'date' },
-    { name: 'valor', label: 'Valor', type: 'number' },
+    { name: 'valor', label: 'Valor', type: 'number'},
     { name: 'tipo_pagamento', label: 'Tipo de Pagamento' },
-    { name: 'total_pago', label: 'Total Pago', type: 'number' },
+    { name: 'total_pago', label: 'Total Pago', type: 'number'},
   ];
 
   if (loading) {

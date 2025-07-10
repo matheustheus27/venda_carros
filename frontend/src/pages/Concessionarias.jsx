@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { formatCnpj, formatPhoneNumber } from "../utils/formattypes";
 import axios from "../services/api";
 import GenericTable from "../components/GenericTable";
 import Modal from "../components/Modal";
@@ -113,9 +114,9 @@ export default function Concessionarias() {
 
   const renderConcessionariaRow = (c) => (
     <>
-      <td className="py-2 px-4 border-b border-gray-200">{c.cnpj}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatCnpj(c.cnpj)}</td>
       <td className="py-2 px-4 border-b border-gray-200">{c.nome}</td>
-      <td className="py-2 px-4 border-b border-gray-200">{c.telefone}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatPhoneNumber(c.telefone)}</td>
       <td className="py-2 px-4 border-b border-gray-200">{c.endereco}</td>
     </>
   );
@@ -140,19 +141,19 @@ export default function Concessionarias() {
   );
 
   const concessionariasLockedFields = [
-    { name: 'cnpj', label: 'CNPJ' },
+    { name: 'cnpj', label: 'CNPJ', formatter: formatCnpj },
   ];
 
   const concessionariasEditableFields = [
     { name: 'nome', label: 'Nome' },
-    { name: 'telefone', label: 'Telefone' },
+    { name: 'telefone', label: 'Telefone', formatter: formatPhoneNumber },
     { name: 'endereco', label: 'Endereço' },
   ];
 
   const concessionariasAddFields = [
-    { name: 'cnpj', label: 'CNPJ' },
+    { name: 'cnpj', label: 'CNPJ', formatter: formatCnpj },
     { name: 'nome', label: 'Nome' },
-    { name: 'telefone', label: 'Telefone' },
+    { name: 'telefone', label: 'Telefone', formatter: formatPhoneNumber },
     { name: 'endereco', label: 'Endereço' },
   ];
 

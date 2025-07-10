@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { formatCnpj, formatCurrency } from "../utils/formattypes";
 import axios from "../services/api";
 import GenericTable from "../components/GenericTable";
 import Modal from "../components/Modal";
@@ -133,11 +134,10 @@ export default function Carros() {
       <td className="py-2 px-4 border-b border-gray-200">
         {c.quilometragem.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
       </td>
-      <td className="py-2 px-4 border-b border-gray-200">
-        R$ {parseFloat(c.preco).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      <td className="py-2 px-4 border-b border-gray-200">{formatCurrency(c.preco)}
       </td>
       <td className="py-2 px-4 border-b border-gray-200">{c.status}</td>
-      <td className="py-2 px-4 border-b border-gray-200">{c.cnpj_concessionaria}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatCnpj(c.cnpj_concessionaria)}</td>
     </>
   );
 
@@ -172,7 +172,7 @@ export default function Carros() {
     { name: 'quilometragem', label: 'Quilometragem', type: 'number' },
     { name: 'preco', label: 'Preço', type: 'number' },
     { name: 'status', label: 'Status' },
-    { name: 'cnpj_concessionaria', label: 'cnpj_concessionaria' },
+    { name: 'cnpj_concessionaria', label: 'cnpj_concessionaria', formatter: formatCnpj },
   ];
 
   const carrosAddFields = [
@@ -184,7 +184,7 @@ export default function Carros() {
     { name: 'quilometragem', label: 'Quilometragem', type: 'number' },
     { name: 'preco', label: 'Preço', type: 'number' },
     { name: 'status', label: 'Status' },
-    { name: 'cnpj_concessionaria', label: 'CNPJ da Concessionária' },
+    { name: 'cnpj_concessionaria', label: 'CNPJ da Concessionária', formatter: formatCnpj },
   ];
 
   if (loading) {

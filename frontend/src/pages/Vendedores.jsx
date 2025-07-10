@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { formatCnpj, formatCpf, formatPhoneNumber } from "../utils/formattypes";
 import axios from "../services/api";
 import GenericTable from "../components/GenericTable";
 import Modal from "../components/Modal";
@@ -114,11 +115,11 @@ export default function Vendedores() {
 
   const renderVendedorRow = (v) => (
     <>
-      <td className="py-2 px-4 border-b border-gray-200">{v.cpf}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatCpf(v.cpf)}</td>
       <td className="py-2 px-4 border-b border-gray-200">{v.nome}</td>
-      <td className="py-2 px-4 border-b border-gray-200">{v.telefone}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatPhoneNumber(v.telefone)}</td>
       <td className="py-2 px-4 border-b border-gray-200">{v.email}</td>
-      <td className="py-2 px-4 border-b border-gray-200">{v.cnpj_concessionaria}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatCnpj(v.cnpj_concessionaria)}</td>
     </>
   );
 
@@ -142,22 +143,22 @@ export default function Vendedores() {
   );
 
   const vendedoresLockedFields = [
-    { name: 'cpf', label: 'CPF' },
+    { name: 'cpf', label: 'CPF', formatter: formatCpf },
   ];
 
   const vendedoresEditableFields = [
     { name: 'nome', label: 'Nome' },
-    { name: 'telefone', label: 'Telefone' },
+    { name: 'telefone', label: 'Telefone', formatter: formatPhoneNumber },
     { name: 'email', label: 'Email' },
-    { name: 'cnpj_concessionaria', label: 'CNPJ da Concessionária' },
+    { name: 'cnpj_concessionaria', label: 'CNPJ da Concessionária', formatter: formatCnpj },
   ];
 
   const vendedoresAddFields = [
-    { name: 'cpf', label: 'CPF' },
+    { name: 'cpf', label: 'CPF', formatter: formatCpf },
     { name: 'nome', label: 'Nome' },
-    { name: 'telefone', label: 'Telefone' },
+    { name: 'telefone', label: 'Telefone', formatter: formatPhoneNumber },
     { name: 'email', label: 'Email' },
-    { name: 'cnpj_concessionaria', label: 'cnpj_concessionaria' },
+    { name: 'cnpj_concessionaria', label: 'cnpj_concessionaria', formatter: formatCnpj },
   ];
 
   if (loading) {

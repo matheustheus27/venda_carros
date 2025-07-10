@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../css/Modal.css';
+import { formatCpf, formatCnpj, formatPhoneNumber, formatDateForDisplay } from '../utils/formattypes';
 
 export default function Modal({
   isOpen,
@@ -7,69 +8,85 @@ export default function Modal({
   entityData,
   onSave,
   title,
-  lockedFieldsConfig,
-  editableFieldsConfig,
+  lockedFieldsConfig = [],
+  editableFieldsConfig = [],
 }) {
   const [formData, setFormData] = useState({});
-
+  
   useEffect(() => {
-    if (entityData) {
-      const initialData = {};
-      [...lockedFieldsConfig, ...editableFieldsConfig].forEach(field => {
-        initialData[field.name] = entityData[field.name] || '';
+    if (isOpen && entityData) {
+      const initialForm = {};
+      const allFields = [...lockedFieldsConfig, ...editableFieldsConfig];
+
+      allFields.forEach(field => {
+        let value = entityData[field.name];
+
+        if (field.name === 'data' && value) {
+          if (typeof value === 'string' && value.includes('/')) {
+            const parts = value.split('/');
+            value = `${parts[2]}-${parts[1]}-${parts[0]}`;
+          } else if (value instanceof Date) {
+            value = value.toISOString().split('T')[0];
+          }
+        } else if (field.formatter && typeof value === 'string') {
+          value = value.replace(/\D/g, '');
+        }
+        
+        initialForm[field.name] = value || '';
       });
-      setFormData(initialData);
+      setFormData(initialForm);
+    } else {
+      setFormData({});
     }
-  }, [entityData, lockedFieldsConfig, editableFieldsConfig]);
+  }, [isOpen, entityData, lockedFieldsConfig, editableFieldsConfig]);
+
 
   if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const fieldConfig = [...lockedFieldsConfig, ...editableFieldsConfig].find(f => f.name === name);
+    let cleanedValue = value;
+
+    if (fieldConfig && fieldConfig.type === 'number') {
+        cleanedValue = parseFloat(value) || 0;
+    } else if (fieldConfig.formatter) {
+      cleanedValue = String(value).replace(/\D/g, '');
+    }
+
+    setFormData(prev => ({ ...prev, [name]: cleanedValue }));
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(formData);
   };
 
-  const formatDateForInput = (dateString) => {
-    if (!dateString) return '';
-    const parts = dateString.split('/');
-    if (parts.length === 3) {
-      return `${parts[2]}-${parts[1]}-${parts[0]}`;
-    }
-    return dateString;
-  };
-
   const renderField = (field, isLocked) => {
     let inputValue = formData[field.name];
     let inputType = field.type || 'text';
 
-    if (field.type === 'date' && inputValue) {
-      inputValue = formatDateForInput(inputValue);
-    } else if (field.type === 'number' && typeof inputValue === 'number') {
-        // Para números, não formata aqui, deixa o input type="number" lidar
-    } else if (field.format === 'currency' && typeof inputValue === 'number') {
-      // O input type="number" lida melhor com números puros
-      // Se precisar de máscara de moeda no display, isso é mais complexo com input type="number"
-      // Para edição, é melhor manter o número puro
+    if (field.formatter && inputType !== 'date' && inputType !== 'number') {
+      inputValue = field.formatter(inputValue);
     }
-
 
     return (
       <div className="modal-input-group" key={field.name}>
-        <label className="modal-input-label" htmlFor={field.name}>{field.label}:</label>
+        <label className="modal-input-label" htmlFor={field.name}>
+          {field.label}:
+          {isLocked && <span className="text-gray-500 text-sm ml-1">(Não Editável)</span>}
+        </label>
         <input
           type={inputType}
           name={field.name}
           id={field.name}
-          value={inputValue}
+          value={inputValue || ''}
           onChange={isLocked ? null : handleChange}
           className={`modal-input ${isLocked ? 'read-only' : ''}`}
           readOnly={isLocked}
           disabled={isLocked}
+          step={inputType === 'number' ? 'any' : undefined}
         />
       </div>
     );
@@ -78,9 +95,8 @@ export default function Modal({
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        {}
         <div className="modal-header">
-          <h3>{title}</h3> {}
+          <h3>{title}</h3>
           <button
             onClick={onClose}
             className="modal-close-button"
@@ -91,7 +107,7 @@ export default function Modal({
         </div>
 
         <form onSubmit={handleSubmit}>
-          {lockedFieldsConfig && lockedFieldsConfig.length > 0 && (
+          {lockedFieldsConfig.length > 0 && (
             <div className="mb-6">
               <h4 className="modal-section-title">Campos Bloqueados:</h4>
               <div className="modal-grid-container locked-fields">
@@ -100,7 +116,7 @@ export default function Modal({
             </div>
           )}
 
-          {editableFieldsConfig && editableFieldsConfig.length > 0 && (
+          {editableFieldsConfig.length > 0 && (
             <div className="mb-6">
               <h4 className="modal-section-title">Campos Editáveis:</h4>
               <div className="modal-grid-container editable-fields">
@@ -109,7 +125,6 @@ export default function Modal({
             </div>
           )}
 
-          {}
           <div className="modal-actions">
             <button
               type="button"

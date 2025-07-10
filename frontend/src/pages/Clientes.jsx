@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { formatCpf, formatPhoneNumber } from "../utils/formattypes";
 import axios from "../services/api";
 import GenericTable from "../components/GenericTable";
 import Modal from "../components/Modal";
@@ -116,9 +117,9 @@ export default function Clientes() {
 
   const renderClienteRow = (c) => (
     <>
-      <td className="py-2 px-4 border-b border-gray-200">{c.cpf}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatCpf(c.cpf)}</td>
       <td className="py-2 px-4 border-b border-gray-200">{c.nome}</td>
-      <td className="py-2 px-4 border-b border-gray-200">{c.telefone}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatPhoneNumber(c.telefone)}</td>
       <td className="py-2 px-4 border-b border-gray-200">{c.email}</td>
       <td className="py-2 px-4 border-b border-gray-200">{c.endereco}</td>
     </>
@@ -144,20 +145,20 @@ export default function Clientes() {
   );
 
   const clientesLockedFields = [
-    { name: 'cpf', label: 'CPF' },
+    { name: 'cpf', label: 'CPF', formatter: formatCpf },
   ];
 
   const clientesEditableFields = [
     { name: 'nome', label: 'Nome' },
-    { name: 'telefone', label: 'Telefone' },
+    { name: 'telefone', label: 'Telefone', formatter: formatPhoneNumber },
     { name: 'email', label: 'Email' },
     { name: 'endereco', label: 'Endereço' },
   ];
 
   const clientesAddFields = [
-    { name: 'cpf', label: 'CPF' },
+    { name: 'cpf', label: 'CPF', formatter: formatCpf },
     { name: 'nome', label: 'Nome' },
-    { name: 'telefone', label: 'Telefone' },
+    { name: 'telefone', label: 'Telefone', formatter: formatPhoneNumber },
     { name: 'email', label: 'Email' },
     { name: 'endereco', label: 'Endereço' },
   ];
