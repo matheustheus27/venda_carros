@@ -174,3 +174,108 @@ def find_by_concessionaria(cnpj_concessionaria):
             cursor.close()
         if connection:
             connection.close()
+
+def show_sales():
+    connection = None
+    cursor = None
+
+    try:
+        connection = get_connection()
+
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT v.nome AS nome_vendedor, v.cpf AS cpf_vendedor, ve.placa_carro, ve.data AS data_venda, ve.valor AS valor_venda " \
+            "FROM vendedor v " \
+            "LEFT JOIN venda ve ON v.cpf = ve.cpf_vendedor " \
+            "ORDER BY v.nome"
+        )
+
+        result = cursor.fetchall()
+
+        for venda in result:
+            if venda["valor_venda"] is not None:
+                venda["valor_venda"] = float(venda["valor_venda"])
+            if venda["data_venda"] is not None:
+                venda["data_venda"] = venda["data_venda"].isoformat()
+
+        return response_ok(
+            message= "Vendas por vendedor buscados com sucesso!",
+            data= result
+        )
+    except Exception as e:
+        return response_error(
+            message= "Erro ao buscar as vendas por vendedor!",
+            error= e
+        )
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+def show_sales_count():
+    connection = None
+    cursor = None
+
+    try:
+        connection = get_connection()
+
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT v.nome, COUNT(ve.placa_carro) AS total_vendas " \
+            "FROM vendedor v " \
+            "LEFT JOIN venda ve ON v.cpf = ve.cpf_vendedor " \
+            "GROUP BY v.nome, v.cpf " \
+            "ORDER BY v.nome"
+        )
+
+        result = cursor.fetchall()
+
+        return response_ok(
+            message= "Total de vendas por vendedor buscados com sucesso!",
+            data= result
+        )
+    except Exception as e:
+        return response_error(
+            message= "Erro ao buscar o total de vendas por vendedor!",
+            error= e
+        )
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+def show_min_sales_count(min_vendas):
+    connection = None
+    cursor = None
+
+    try:
+        connection = get_connection()
+
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT v.nome, COUNT(ve.placa_carro) AS total_vendas " \
+            "FROM vendedor v " \
+            "LEFT JOIN venda ve ON v.cpf = ve.cpf_vendedor " \
+            "GROUP BY v.nome, v.cpf " \
+            "HAVING COUNT(ve.placa_carro) >= %s " \
+            "ORDER BY v.nome", (min_vendas,)
+        )
+
+        result = cursor.fetchall()
+
+        return response_ok(
+            message= "Total de vendas por vendedor buscados com sucesso!",
+            data= result
+        )
+    except Exception as e:
+        return response_error(
+            message= "Erro ao buscar o total de vendas por vendedor!",
+            error= e
+        )
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()

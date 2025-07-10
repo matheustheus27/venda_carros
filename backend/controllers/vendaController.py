@@ -306,3 +306,58 @@ def find_by_concessionaria(cnpj_concessionaria: str = Path(
     example="12345678900000"
 )):
     return venda.find_by_concessionaria(cnpj_concessionaria)
+
+@router.get(
+    '/detalhes',
+    summary= "Retorna a lista de todas as vendas detalhadas",
+    responses= {
+        200: {
+            "content": {
+                "application/json": {
+                    "example": {
+                        "status": True,
+                        "message": "Detalhes de vendas buscados com sucesso!",
+                        "data": [
+                            {
+                                "data": "2025-07-07",
+                                "carro_modelo": "Mustang",
+                                "cliente_nome": "José da Silva",
+                                "vendedor_nome": "Marcos Teixeira",
+                                "concessionaria_nome": "Auto Car BH",
+                                "valor": 250000.55,
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+)
+def show_details():
+    return venda.show_details()
+
+@router.get(
+    '/media',
+    summary= "Retorna a lista de todas as vendas acima da media de preços",
+    responses= {
+        200: {
+            "content": {
+                "application/json": {
+                    "example": {
+                        "status": True,
+                        "message": "Vendas com preço acima da media buscadas com sucesso!",
+                        "data": [
+                            {
+                                "cliente_nome": "José da Silva",
+                                "carro_modelo": "Mustang",
+                                "preco": 250000.55,
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+)
+def show_above_avg_sales():
+    return venda.show_above_avg_sales()

@@ -258,3 +258,77 @@ def find_by_concessionaria(cnpj_concessionaria):
             cursor.close()
         if connection:
             connection.close()
+
+def show_details():
+    connection = None
+    cursor = None
+    
+    try:
+        connection = get_connection()
+
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT v.data, ca.modelo AS carro_modelo, cl.nome AS cliente_nome, ve.nome AS vendedor_nome, co.nome AS concessionaria_nome, v.valor " \
+            "FROM venda v " \
+            "INNER JOIN carro ca ON v.placa_carro = ca.placa " \
+            "INNER JOIN cliente cl ON v.cpf_cliente = cl.cpf " \
+            "INNER JOIN vendedor ve ON v.cpf_vendedor = ve.cpf " \
+            "INNER JOIN concessionaria co ON v.cnpj_concessionaria = co.cnpj"
+        )
+
+        result = cursor.fetchall()
+
+        for venda in result:
+            venda["valor"] = float(venda["valor"])
+            venda["data"] = venda["data"].isoformat()
+
+        return  response_ok(
+            message= "Detalhes de vendas buscados com sucesso!",
+            data= result
+        )
+    except Exception as e:
+        return response_error(
+            message= "Erro ao buscar os detalhes de vendas!",
+            error= e
+        )
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+def show_above_avg_sales():
+    connection = None
+    cursor = None
+    
+    try:
+        connection = get_connection()
+
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT cl.nome AS cliente_nome, ca.modelo AS carro_modelo, ca.preco " \
+            "FROM venda v " \
+            "JOIN carro ca ON v.placa_carro = ca.placa " \
+            "JOIN cliente cl ON v.cpf_cliente = cl.cpf " \
+            "WHERE ca.preco > (SELECT AVG(preco) FROM carro)"
+        )
+
+        result = cursor.fetchall()
+
+        for venda in result:
+            venda["preco"] = float(venda["preco"])
+
+        return  response_ok(
+            message= "Vendas com preço acima da media buscadas com sucesso!",
+            data= result
+        )
+    except Exception as e:
+        return response_error(
+            message= "Erro ao buscar as vendas!",
+            error= e
+        )
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()

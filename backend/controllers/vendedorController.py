@@ -162,3 +162,86 @@ def find_by_concessionaria(cnpj_concessionaria: str = Path(
     example="12345678900000"
 )):
     return vendedor.find_by_concessionaria(cnpj_concessionaria)
+
+@router.get(
+    '/vendas/listagem',
+    summary= "Retorna todos os vendedores e os detalhes de cada venda que realizaram",
+    responses= {
+        200: {
+            "content": {
+                "application/json": {
+                    "example": {
+                        "status": True,
+                        "message": "Vendedores buscados com sucesso!",
+                        "data": [
+                            {
+                                "nome_vendedor": "José da Silva",
+                                "cpf": "12345678913",
+                                "placa_carro": "AAA1234",
+                                "data": "2025-07-07",
+                                "valor": 250000.45
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+)
+def show_sales():
+    return vendedor.show_sales()
+
+@router.get(
+    '/vendas/contagem',
+    summary= "Retorna o número de vendas para cada vendedor",
+    responses= {
+        200: {
+            "content": {
+                "application/json": {
+                    "example": {
+                        "status": True,
+                        "message": "Vendedores buscados com sucesso!",
+                        "data": [
+                            {
+                                "nome": "José da Silva",
+                                "total_vendas": 2
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+)
+def show_sales_count():
+    return vendedor.show_sales_count()
+
+@router.get(
+    '/vendas/contagem/{min_vendas}',
+    summary= "Retorna os vendedores que possuem o numero minimo de vendas passadas como parâmetro",
+    responses= {
+        200: {
+            "content": {
+                "application/json": {
+                    "example": {
+                        "status": True,
+                        "message": "Vendedores buscados com sucesso!",
+                        "data": [
+                            {
+                                "nome": "José da Silva",
+                                "total_vendas": 2
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+)
+def show_min_sales_count(min_vendas: int = Path(
+    ...,
+    title="Quantidade de Vendas",
+    description="Quantidade minima de vendas para os vendedores",
+    example=1
+)):
+    return vendedor.show_min_sales_count(min_vendas)
