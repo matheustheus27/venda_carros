@@ -84,7 +84,7 @@ export default function Concessionarias() {
     .then(res => {
       console.log("Concessionaria atualizada com sucesso!", res.data);
       setConcessionarias(concessionarias.map(c =>
-        c.cpf === updateConcessionariaData.cpf
+        c.cnpj === updateConcessionariaData.cnpj
           ? { ...c, ...updateConcessionariaData }
           : c
       ));
