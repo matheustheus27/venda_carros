@@ -150,14 +150,14 @@ DELIMITER ;
 
 insert into cliente values ('94499410096', 'Carlos Angelo', '31999999999', 'carlos@teste.com', 'Rua Ouro Preto, 1067, Santo Agostinho, Belo Horizonte');
 insert into cliente values ('78131353001', 'Maria Madalena', '31888888888', 'maria@teste.com', 'Rua da Bahia, 1000, Centro, Belo Horizonte');
-insert into cliente values ('98607234005', 'Jorge Assis', '31999998888', 'jorge@teste.com', 'Avenida Afonso Pena, 1234, Funcionários, Belo Horizonte');
-insert into cliente values ('54291085028', 'Emilia Santiago', '31988887777', 'emilia@teste.com', 'Rua Pernambuco, 1000, Funcionárioso, Belo Horizonte');
+insert into cliente values ('98607234005', 'Jorge Assis', '31999998888', 'jorge@teste.com', 'Avenida Afonso Pena, 1234, Funcionarios, Belo Horizonte');
+insert into cliente values ('54291085028', 'Emilia Santiago', '31988887777', 'emilia@teste.com', 'Rua Pernambuco, 1000, Funcionarioso, Belo Horizonte');
 insert into cliente values ('30068217005', 'André Marques', '31998989898', 'andre@teste.com', 'Avenida Afonso Pena, 2300, Centro, Belo Horizonte');
 
-insert into concessionaria values ('74343841000138', 'Auto Car BH', '3136227782', 'Rua Sapucaí, 380, Floresta, Belo Horizonte');
-insert into concessionaria values ('52103749000168', 'BH Car', '3136337700', 'Rua Tomé de Souza, 890, Savassi, Belo Horizonte');
-insert into concessionaria values ('78390978000102', 'Seminovos BH', '31972694797', 'Rua Pium-í, 1250, Sion, Belo Horizonte');
-insert into concessionaria values ('67343016000178', 'Carros do Carlos', '31999887744', 'Rua Santa Rita Durão, 1100, Boa Viagem, Belo Horizonte');
+insert into concessionaria values ('74343841000138', 'Auto Car BH', '3136227782', 'Rua Sapucai, 380, Floresta, Belo Horizonte');
+insert into concessionaria values ('52103749000168', 'BH Car', '3136337700', 'Rua Tome de Souza, 890, Savassi, Belo Horizonte');
+insert into concessionaria values ('78390978000102', 'Seminovos BH', '31972694797', 'Rua Pium-i, 1250, Sion, Belo Horizonte');
+insert into concessionaria values ('67343016000178', 'Carros do Carlos', '31999887744', 'Rua Santa Rita Durao, 1100, Boa Viagem, Belo Horizonte');
 insert into concessionaria values ('14756434000120', 'Siga Bem', '31977556612', 'Rua Guaicurus, 500, Centro, Belo Horizonte');
 
 insert into vendedor values ('59264405054', 'Emerson Tertuliano', '31988775241', 'emerson@teste.com', '74343841000138', 0);

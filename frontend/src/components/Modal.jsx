@@ -71,6 +71,32 @@ export default function Modal({
       inputValue = field.formatter(inputValue);
     }
 
+    if (inputType === 'select') {
+    return (
+      <div className="modal-input-group" key={field.name}>
+        <label className="modal-input-label" htmlFor={field.name}>
+          {field.label}:
+        </label>
+        <select
+          name={field.name}
+          id={field.name}
+          value={inputValue || ''}
+          onChange={isLocked ? null : handleChange}
+          className={`modal-input ${isLocked ? 'read-only' : ''}`}
+          disabled={isLocked}
+        >
+          {}
+          <option value="">Selecione...</option>
+          {field.options.map(option => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  }
+
     return (
       <div className="modal-input-group" key={field.name}>
         <label className="modal-input-label" htmlFor={field.name}>

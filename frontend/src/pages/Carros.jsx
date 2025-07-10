@@ -171,7 +171,10 @@ export default function Carros() {
     { name: 'cor', label: 'Cor' },
     { name: 'quilometragem', label: 'Quilometragem', type: 'number' },
     { name: 'preco', label: 'Preço', type: 'number' },
-    { name: 'status', label: 'Status' },
+    { name: 'status', label: 'Status', type: 'select', options: [
+      { value: 'Disponível', label: 'Disponível' },
+      { value: 'Vendido', label: 'Vendido' }
+    ] },
     { name: 'cnpj_concessionaria', label: 'cnpj_concessionaria', formatter: formatCnpj },
   ];
 
@@ -183,7 +186,10 @@ export default function Carros() {
     { name: 'cor', label: 'Cor' },
     { name: 'quilometragem', label: 'Quilometragem', type: 'number' },
     { name: 'preco', label: 'Preço', type: 'number' },
-    { name: 'status', label: 'Status' },
+    { name: 'status', label: 'Status', type: 'select', options: [
+      { value: 'Disponivel', label: 'Disponivel' },
+      { value: 'Vendido', label: 'Vendido' }
+    ] },
     { name: 'cnpj_concessionaria', label: 'CNPJ da Concessionária', formatter: formatCnpj },
   ];
 
