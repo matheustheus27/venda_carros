@@ -161,10 +161,10 @@ insert into concessionaria values ('67343016000178', 'Carros do Carlos', '319998
 insert into concessionaria values ('14756434000120', 'Siga Bem', '31977556612', 'Rua Guaicurus, 500, Centro, Belo Horizonte');
 
 insert into vendedor values ('59264405054', 'Emerson Tertuliano', '31988775241', 'emerson@teste.com', '74343841000138', 0);
-insert into vendedor values ('43494499063', 'Altair Machado', '31988775241', 'emerson@teste.com', '52103749000168', 0);
-insert into vendedor values ('77051489003', 'Vitor Teixeira', '31988775241', 'emerson@teste.com', '78390978000102', 0);
-insert into vendedor values ('67355128043', 'Ernandes Valverde', '31988775241', 'emerson@teste.com', '67343016000178', 0);
-insert into vendedor values ('80665487029', 'Iris Abravanel', '31988775241', 'emerson@teste.com', '14756434000120', 0);
+insert into vendedor values ('43494499063', 'Altair Machado', '31988775241', 'altair@teste.com', '52103749000168', 0);
+insert into vendedor values ('77051489003', 'Vitor Teixeira', '31988775241', 'vitor@teste.com', '78390978000102', 0);
+insert into vendedor values ('67355128043', 'Ernandes Valverde', '31988775241', 'ernandes@teste.com', '67343016000178', 0);
+insert into vendedor values ('80665487029', 'Iris Abravanel', '31988775241', 'iris@teste.com', '14756434000120', 0);
 
 insert into carro values ('AAA1234', 'Ford', 'Mustang', 2020, 'Preto', 120.55, 250000.98, 'Disponivel', '74343841000138');
 insert into carro values ('BBB1234', 'Fiat', 'Uno', 2015, 'Prata', 300000, 25000.00, 'Disponivel', '74343841000138');
