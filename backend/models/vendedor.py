@@ -222,7 +222,7 @@ def show_sales_count():
 
         cursor = connection.cursor(dictionary=True)
         cursor.execute(
-            "SELECT v.nome, COUNT(ve.placa_carro) AS total_vendas " \
+            "SELECT v.nome, COUNT(ve.placa_carro) AS total_vendas, SUM(ve.total_pago) AS valor_total " \
             "FROM vendedor v " \
             "LEFT JOIN venda ve ON v.cpf = ve.cpf_vendedor " \
             "GROUP BY v.nome, v.cpf " \
@@ -230,6 +230,12 @@ def show_sales_count():
         )
 
         result = cursor.fetchall()
+
+        for venda in result:
+            if venda["valor_total"] is not None:
+                venda["valor_total"] = float(venda["valor_total"])
+            else:
+                venda["valor_total"] = 0
 
         return response_ok(
             message= "Total de vendas por vendedor buscados com sucesso!",
@@ -255,7 +261,7 @@ def show_min_sales_count(min_vendas):
 
         cursor = connection.cursor(dictionary=True)
         cursor.execute(
-            "SELECT v.nome, COUNT(ve.placa_carro) AS total_vendas " \
+            "SELECT v.nome, COUNT(ve.placa_carro) AS total_vendas, SUM(ve.total_pago) AS valor_total " \
             "FROM vendedor v " \
             "LEFT JOIN venda ve ON v.cpf = ve.cpf_vendedor " \
             "GROUP BY v.nome, v.cpf " \
@@ -264,6 +270,12 @@ def show_min_sales_count(min_vendas):
         )
 
         result = cursor.fetchall()
+
+        for venda in result:
+            if venda["valor_total"] is not None:
+                venda["valor_total"] = float(venda["valor_total"])
+            else:
+                venda["valor_total"] = 0
 
         return response_ok(
             message= "Total de vendas por vendedor buscados com sucesso!",

@@ -58,11 +58,11 @@ export default function Relatorios() {
   ];
 
   const vendasPorVendedorHeaders = [
-    "Vendedor", "Nº de Vendas"
+    "Vendedor", "Nº de Vendas", "Valor Total"
   ];
 
   const vendedoresVendasMinimasHeaders = [
-    "Vendedor", "Nº de Vendas"
+    "Vendedor", "Nº de Vendas", "Valor Total"
   ];
 
   const renderTodasVendasRow = (venda) => (
@@ -88,13 +88,15 @@ export default function Relatorios() {
     <>
       <td className="py-2 px-4 border-b border-gray-200">{vendedor.nome}</td>
       <td className="py-2 px-4 border-b border-gray-200">{vendedor.total_vendas}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatCurrency(vendedor.valor_total)}</td>
     </>
   );
 
   const renderVendedoresVendasMinimasRow = (vendedor) => (
     <>
       <td className="py-2 px-4 border-b border-gray-200">{vendedor.nome}</td>
-      <td className="py-2 px-4 border-b border-gray-200">{vendedor.total_vendas}</td> {/* Assumindo que o campo é 'total_vendas' também */}
+      <td className="py-2 px-4 border-b border-gray-200">{vendedor.total_vendas}</td>
+      <td className="py-2 px-4 border-b border-gray-200">{formatCurrency(vendedor.valor_total)}</td>
     </>
   );
 
