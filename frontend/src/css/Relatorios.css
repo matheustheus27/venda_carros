@@ -1,0 +1,52 @@
+.relatorios-container {
+  padding: 20px;
+}
+
+.relatorios-container h1 {
+  margin-bottom: 30px;
+  text-align: center;
+  color: #333;
+}
+
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 30px;
+  justify-content: center;
+  align-items: start;
+}
+
+.report-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.report-card h2 {
+  color: #555;
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.loading-message, .error-message {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2em;
+  color: #666;
+}
+
+.error-message {
+  color: #d9534f;
+}
+
+@media (max-width: 900px) {
+  .reports-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -50,6 +50,14 @@ export default function Header() {
         >
           🚘 Carros
         </NavLink>
+        <NavLink
+          to="/relatorios"
+          className={({ isActive }) =>
+            isActive ? "nav-link-item active-tab" : "nav-link-item"
+          }
+        >
+          📈 Relatórios
+        </NavLink>
       </nav>
     </>
   );
