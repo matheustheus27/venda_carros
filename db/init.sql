@@ -151,8 +151,8 @@ DELIMITER ;
 insert into cliente values ('94499410096', 'Carlos Angelo', '31999999999', 'carlos@teste.com', 'Rua Ouro Preto, 1067, Santo Agostinho, Belo Horizonte');
 insert into cliente values ('78131353001', 'Maria Madalena', '31888888888', 'maria@teste.com', 'Rua da Bahia, 1000, Centro, Belo Horizonte');
 insert into cliente values ('98607234005', 'Jorge Assis', '31999998888', 'jorge@teste.com', 'Avenida Afonso Pena, 1234, Funcionarios, Belo Horizonte');
-insert into cliente values ('54291085028', 'Emilia Santiago', '31988887777', 'emilia@teste.com', 'Rua Pernambuco, 1000, Funcionarioso, Belo Horizonte');
-insert into cliente values ('30068217005', 'André Marques', '31998989898', 'andre@teste.com', 'Avenida Afonso Pena, 2300, Centro, Belo Horizonte');
+insert into cliente values ('54291085028', 'Emilia Santiago', '31988887777', 'emilia@teste.com', 'Rua Pernambuco, 1000, Funcionarios, Belo Horizonte');
+insert into cliente values ('30068217005', 'Andre Marques', '31998989898', 'andre@teste.com', 'Avenida Afonso Pena, 2300, Centro, Belo Horizonte');
 
 insert into concessionaria values ('74343841000138', 'Auto Car BH', '3136227782', 'Rua Sapucai, 380, Floresta, Belo Horizonte');
 insert into concessionaria values ('52103749000168', 'BH Car', '3136337700', 'Rua Tome de Souza, 890, Savassi, Belo Horizonte');
