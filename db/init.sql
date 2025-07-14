@@ -144,6 +144,56 @@ BEGIN
     END IF;
 END //
 
+-- Trigger 6: TR_VERIFICAR_CONCESSIONARIA_CARRP_VEMDEDPR
+-- Verifica se o carro e o vendedor pertence a concessionária
+DROP TRIGGER IF EXISTS tr_verificar_concessionaria_carro_vendedor;
+
+CREATE TRIGGER tr_verificar_concessionaria_carro_vendedor
+BEFORE INSERT ON venda
+FOR EACH ROW
+BEGIN
+    DECLARE v_cnpj_carro VARCHAR(14);
+    DECLARE v_cnpj_vendedor VARCHAR(14);
+    DECLARE v_msg_erro VARCHAR(255);
+
+    -- Verifica a concessionária do carro
+    SELECT cnpj_concessionaria INTO v_cnpj_carro
+    FROM carro
+    WHERE placa = NEW.placa_carro;
+
+    IF v_cnpj_carro IS NULL THEN
+        SET v_msg_erro = CONCAT('Carro com placa ', NEW.placa_carro, ' não encontrado.');
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg_erro;
+    END IF;
+
+    -- Verifica a concessionária do vendedor
+    SELECT cnpj_concessionaria INTO v_cnpj_vendedor
+    FROM vendedor
+    WHERE cpf = NEW.cpf_vendedor;
+
+    IF v_cnpj_vendedor IS NULL THEN
+        SET v_msg_erro = CONCAT('Vendedor com CPF ', NEW.cpf_vendedor, ' não encontrado.');
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg_erro;
+    END IF;
+
+    -- Verifica se ambos pertencem à mesma concessionária passada na venda
+    IF v_cnpj_carro <> NEW.cnpj_concessionaria THEN
+        SET v_msg_erro = CONCAT(
+            'O carro com placa ', NEW.placa_carro,
+            ' não pertence à concessionária ', NEW.cnpj_concessionaria, '.'
+        );
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg_erro;
+    END IF;
+
+    IF v_cnpj_vendedor <> NEW.cnpj_concessionaria THEN
+        SET v_msg_erro = CONCAT(
+            'O vendedor com CPF ', NEW.cpf_vendedor,
+            ' não trabalha na concessionária ', NEW.cnpj_concessionaria, '.'
+        );
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_msg_erro;
+    END IF;
+END //
+
 DELIMITER ;
 
 -- Populando o Banco de Dados
