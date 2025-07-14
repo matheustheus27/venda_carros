@@ -27,3 +27,6 @@ O projeto foi desenvolvido usando o padrão MVC, com os comandos da Model sendo 
 
 ## Acesso ao Sistema (Front-end)
 [http://localhost:3000](http://localhost:3000)
+
+## Video Apresentando o Projeto
+[Youtube](https://www.youtube.com/watch?v=qm-bWm7iEi0)
