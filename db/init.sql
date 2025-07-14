@@ -144,7 +144,7 @@ BEGIN
     END IF;
 END //
 
--- Trigger 6: TR_VERIFICAR_CONCESSIONARIA_CARRP_VEMDEDPR
+-- Trigger 6: TR_VERIFICAR_CONCESSIONARIA_CARRO_VENDEDOR
 -- Verifica se o carro e o vendedor pertence a concessionária
 DROP TRIGGER IF EXISTS tr_verificar_concessionaria_carro_vendedor;
 
