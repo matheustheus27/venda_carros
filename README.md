@@ -1,32 +1,64 @@
-# Aplicação de Gerenciamento de Venda de Carros
-Trabalho desenvolvido para a Disciplina de Banco de Dados I do curso de Engenharia de Computação do CEFET-MG
+# Car Sales Management System 🚗💼
 
-## Docente
-        Evandrino Barros
+A robust database-driven web application designed to manage automotive inventory, sales pipelines, and customer relations. This project was developed as the final practical evaluation for the **Database Systems I** course in the Computer Engineering curriculum at CEFET-MG.
 
-## Discentes
-        Antônio José Peixoto Chaves
-        Gabriel Neri Ferreira Santos
-        Matheus Thiago de Souza Ferreira
-        Vitor Hugo Mota Soares
+---
 
-## Informações Basicas
-O projeto foi desenvolvido usando o padrão MVC, com os comandos da Model sendo executada em sentenças SQL sem uso de ORM.
+## 👥 Authorship & Faculty
 
-## Diagrama Entidade Relacionamento
-[![Diagrama ER](https://github.com/matheustheus27/venda_carros/blob/main/diagrama_er/diagrama_er.png)](https://github.com/matheustheus27/venda_carros/blob/main/diagrama_er/diagrama_er.png)
+* **Professor:** Evandrino Barros
+* **Development Team:**
+  * Antônio José Peixoto Chaves
+  * Gabriel Neri Ferreira Santos
+  * Matheus Thiago de Souza Ferreira
+  * Vitor Hugo Mota Soares
 
-## Instruções de Execução de Projeto
-1. Intalar o [Docker](https://www.docker.com/)
-2. Abrir o terminal na raiz do projeto
-3. Rodar o comando `docker-compose up --build`
-4. Aguardar a criação do container
+---
 
-## Documentação das APIs (Back-end)
-[http://localhost:8000/docs](http://localhost:8000/docs)
+## 🛠️ System Architecture & Database Design
 
-## Acesso ao Sistema (Front-end)
-[http://localhost:3000](http://localhost:3000)
+* **Architectural Pattern:** Built strictly upon the **Model-View-Controller (MVC)** software architecture pattern to ensure clean separation of concerns.
+* **Data Access Layer:** Developed intentionally **without an ORM** (Object-Relational Mapping). All database interactions, transactions, and queries are executed using native, raw **SQL sentences** to maximize query optimization and showcase database fundamentals.
 
-## Video Apresentando o Projeto
-[Youtube](https://www.youtube.com/watch?v=qm-bWm7iEi0)
+### Entity-Relationship Diagram (ERD)
+The underlying relational database schema balances normalization and data integrity. Below is the conceptual design:
+
+<div align="center">
+  <a href="./diagrama_er/diagrama_er.png" target="_blank">
+    <img src="./cover/database-schema-cover.jpg" alt="Database Architecture & ERD Design" width="75%">
+  </a>
+</div>
+
+---
+
+## 🚀 Execution & Local Deployment
+
+The entire environment is fully containerized to minimize host machine setup and avoid dependency drifting.
+
+### 1. Prerequisites
+Ensure you have [Docker & Docker Compose](https://www.docker.com/) installed and running on your system.
+
+### 2. Launching the Containers
+Open your terminal environment at the root directory of the repository and execute the orchestration build command:
+```bash
+docker-compose up --build
+```
+
+### 3. Verification
+Wait for the initialization logs to stabilize. Once the database migrations are executed and the containers are fully active, the application services will be exposed locally.
+
+## 🌐 Application Gateway (Local Access Links)
+Once your local Docker containers are fully up and running, you can access the system boundaries via the following endpoints:
+
+Front-End User Interface: Available at http://localhost:3000
+
+Back-End API Documentation: Interactive Swagger/OpenAPI documentation can be audited at http://localhost:8000/docs
+
+## 🎥 Project Demonstration
+For a comprehensive walkthrough of the system functionalities, database constraints, and engineering implementation, watch our video presentation:
+
+<div align="center">
+  <a href="https://www.youtube.com/watch?v=qm-bWm7iEi0" target="_blank">
+    <img src="./cover/demo-video-cover.jpg" alt="Database Architecture & ERD Design" width="75%">
+  </a>
+</div>
